@@ -26,7 +26,7 @@ How:
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 # AUTH
-## 0.10
+### 0.10
 - [x] register app on Spotify dev dashboard
 - [x] find out how Spotify auth works
 - [x] login part on frontend
@@ -41,10 +41,10 @@ How:
 
 
 # DASHBOARD
-## 0.10
+### 0.10
 - [x] Routes
 - [x] get user ID in order to display it on navbar
-## 0.11
+### 0.11
 - [x] figure out logic on backend
 - [x] handle situation when two artists are listed as album/song creators
 - [x] handle duplicates(when following two artists that released one song together)
@@ -57,7 +57,7 @@ How:
 
 
 # GROUPS PAGE
-## 0.11
+### 0.11
 - [x] get user's playlists
 - [x] create group
   - [x] list added artist inside group
@@ -74,7 +74,7 @@ How:
 
 
 # ARTISTS PAGE
-## 0.11
+### 0.11
 - [x] get followed artists
 - [ ] add option to unfollow(from Spotify)
   - [ ] unfollowing means automatically removing artists from database as well
@@ -84,7 +84,7 @@ How:
 
 
 # RELEASES PAGE
-## 0.11
+### 0.11
 - [x] basic load - show albums only
 - [x] add info if album is single, EP/full album
 - [x] separate API calls for songs/albums with more details for this page
