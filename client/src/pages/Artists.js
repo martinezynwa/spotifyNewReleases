@@ -1,8 +1,10 @@
+import FollowedArtists from '../components/Groups/FollowedArtists.js'
+
 const Artists = () => {
   return (
     <>
       <div>
-        <h1>Artists</h1>
+        <FollowedArtists />
       </div>
     </>
   )

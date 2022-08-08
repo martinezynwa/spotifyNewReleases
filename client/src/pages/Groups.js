@@ -1,27 +1,12 @@
-import { useState, useEffect } from 'react'
-import artistsService from '../services/artists.js'
+import CreateGroup from '../components/Groups/CreateGroup.js'
+import AllGroups from '../components/Groups/AllGroups.js'
 
 const Groups = () => {
-  const [artists, setArtists] = useState([])
-
-  useEffect(() => {
-    const getData = async () => {
-      await artistsService.getFollowedArtists().then(res => {
-        setArtists(res)
-      })
-    }
-    getData()
-  }, [])
-
   return (
     <>
       <div>
-        <h1>Followed Artists</h1>
-        {artists.map(a => (
-          <p key={a.id}>
-            {a.name} {a.id}
-          </p>
-        ))}
+        <CreateGroup />
+        <AllGroups />
       </div>
     </>
   )

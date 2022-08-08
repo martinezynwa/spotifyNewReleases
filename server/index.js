@@ -2,7 +2,8 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import loginRouter from './controllers/login.js'
-//import userRouter from './controllers/user.js'
+import groupRouter from './controllers/groups.js'
+import artistRouter from './controllers/artists.js'
 
 const PORT = 3001
 const app = express()
@@ -10,7 +11,8 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use('/', loginRouter)
-//app.use('/', userRouter)
+app.use('/groups', groupRouter)
+app.use('/artists', artistRouter)
 
 mongoose
   .connect(process.env.MONGODB_URI, {

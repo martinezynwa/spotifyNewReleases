@@ -1,7 +1,11 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-const scopes = ['user-follow-read', 'playlist-read-private']
+const scopes = [
+  'user-follow-read',
+  'playlist-read-private',
+  'playlist-modify-private',
+]
 
 export const loginUrl = `https://accounts.spotify.com/authorize?client_id=${
   process.env.CLIENT_ID

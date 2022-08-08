@@ -10,4 +10,9 @@ const getLoggedUser = async () => {
   return response.data.display_name
 }
 
-export default { getLoggedUser }
+const getUsersPlaylists = async () => {
+  const response = await axios.get('/me/playlists')
+  return response.data.items
+}
+
+export default { getLoggedUser, getUsersPlaylists }

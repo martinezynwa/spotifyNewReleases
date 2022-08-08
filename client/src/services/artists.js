@@ -45,4 +45,51 @@ const getArtistsAlbums = async () => {
   return artistAlbums
 }
 
-export default { getFollowedArtists, getArtistsAlbums }
+const getReleasedAlbums = async accessToken => {
+  const response = await axios.post(
+    'http://localhost:3001/artists/releases/albums',
+    {
+      accessToken,
+    },
+  )
+  return response
+}
+
+const getReleasedSongs = async (accessToken, album_id) => {
+  const response = await axios.post(
+    'http://localhost:3001/artists/releases/songs',
+    {
+      accessToken,
+      album_id,
+    },
+  )
+  return response
+}
+
+const addArtistToGroup = async content => {
+  const response = await axios.post('http://localhost:3001/artists', content)
+  return response
+}
+
+const editArtistGroup = async (_id, connectedGroup) => {
+  const content = { _id, connectedGroup }
+  const response = await axios.put('http://localhost:3001/artists', content)
+  return response
+}
+
+const getNewReleases = async accessToken => {
+  const response = await axios.post('http://localhost:3001/artists/releases', {
+    accessToken,
+  })
+  return response
+}
+
+export default {
+  getFollowedArtists,
+  getArtistsAlbums,
+  addArtistToGroup,
+  editArtistGroup,
+  getNewReleases,
+  getReleasedAlbums,
+  getReleasedSongs,
+}

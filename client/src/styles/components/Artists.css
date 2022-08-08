@@ -1,0 +1,11 @@
+.single-artist-container {
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+}
+
+.single-artist {
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+}

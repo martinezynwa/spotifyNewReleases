@@ -1,0 +1,12 @@
+.releases-container {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+}
+
+.release {
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+}
