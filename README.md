@@ -25,7 +25,7 @@ How:
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!COMMENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-### AUTH
+# AUTH
 ## 0.10
 - [x] register app on Spotify dev dashboard
 - [x] find out how Spotify auth works
@@ -36,11 +36,11 @@ How:
 - [x] saving tokens on frontend into localstorage
 - [x] timestamp creation to find out when token expires to refresh it
 - [x] token refresh if expired/logout part
-# TBD
+### TBD
 - [ ] check why is token not refreshed automatically
 
 
-### DASHBOARD
+# DASHBOARD
 ## 0.10
 - [x] Routes
 - [x] get user ID in order to display it on navbar
@@ -48,7 +48,7 @@ How:
 - [x] figure out logic on backend
 - [x] handle situation when two artists are listed as album/song creators
 - [x] handle duplicates(when following two artists that released one song together)
-# TBD
+### TBD
 - [ ] figure out why is axios post not working sometimes
 - [ ] add group owner into the item input during group/artist creation
 - [ ] lastFetchDate should be linked with user info from MongoDB
@@ -56,7 +56,7 @@ How:
 - [ ] getting new releases should run automatically once per day, not manually
 
 
-### GROUPS PAGE
+# GROUPS PAGE
 ## 0.11
 - [x] get user's playlists
 - [x] create group
@@ -69,31 +69,32 @@ How:
   - [x] edit button and backend functionality
 - [x] check every artist's lately(using specific date) released music
 - [x] add the songs into the previously selected playlist
-# TBD
+### TBD
 - [ ]
 
 
-### ARTISTS PAGE
+# ARTISTS PAGE
 ## 0.11
 - [x] get followed artists
 - [ ] add option to unfollow(from Spotify)
   - [ ] unfollowing means automatically removing artists from database as well
 - [ ] fix situation, after artist removal, clicking one more time on remove crashes the backend
-# TBD
+### TBD
 - [ ]
 
 
-### RELEASES PAGE
+# RELEASES PAGE
 ## 0.11
 - [x] basic load - show albums only
 - [x] add info if album is single, EP/full album
 - [x] separate API calls for songs/albums with more details for this page
 - [x] option to list songs
 - [x] show song details - number/artists/name/duration
-# TBD
+### TBD
 - [ ] single button for toggling visibility
 
 
-### OTHERS
+# OTHERS
+### TBD
 - [ ] custom hook that handles loading screen during API calls
 - [ ] divide the services/controllers better, some are not where they should be
