@@ -88,7 +88,10 @@ export const logout = () => {
  */
 const getAccessToken = () => {
   const queryString = window.location.search
-  window.history.pushState({}, null, '/')
+  if (queryString.substring(0, 13) === '?access_token') {
+    window.history.pushState({}, null, '/')
+  }
+
   const urlParams = new URLSearchParams(queryString)
   const queryParams = {
     [LOCALSTORAGE_KEYS.accessToken]: urlParams.get('access_token'),

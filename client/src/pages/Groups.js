@@ -1,13 +1,14 @@
 import CreateGroup from '../components/Groups/CreateGroup.js'
 import AllGroups from '../components/Groups/AllGroups.js'
+import { GroupProvider } from '../context/GroupContext.js'
 
 const Groups = () => {
   return (
     <>
-      <div>
+      <GroupProvider>
         <CreateGroup />
         <AllGroups />
-      </div>
+      </GroupProvider>
     </>
   )
 }

@@ -10,6 +10,9 @@ const schema = new mongoose.Schema({
   registeredAt: {
     type: String,
   },
+  lastFetchDate: {
+    type: String,
+  },
 })
 
 module.exports = mongoose.model('User', schema)

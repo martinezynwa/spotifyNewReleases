@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import artistService from '../../services/artists.js'
+import releaseService from '../../services/releases.js'
 import { accessToken } from '../../util/spotifyAuth.js'
 import SingleRelease from './SingleRelease.js'
 
@@ -10,7 +10,7 @@ const ReleasesList = () => {
   useEffect(() => {
     const getData = async () => {
       setLoadingTrigger(true)
-      await artistService
+      await releaseService
         .getReleasedAlbums(accessToken)
         .then(res => {
           setReleases(res.data)

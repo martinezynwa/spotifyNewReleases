@@ -48,12 +48,12 @@ How:
 - [x] figure out logic on backend
 - [x] handle situation when two artists are listed as album/song creators
 - [x] handle duplicates(when following two artists that released one song together)
+- [x] add group owner into the item input during group/artist creation
+- [x] lastFetchDate should be linked with user info from MongoDB
+- [x] figure out why is axios post not working sometimes
+  - [x] axios post to specific playlist may contain more than one item
+- [x] return what songs were added during the run from backend
 ### TBD
-- [ ] figure out why is axios post not working sometimes
-- [ ] add group owner into the item input during group/artist creation
-- [ ] lastFetchDate should be linked with user info from MongoDB
-- [ ] return what songs were added during the run from backend
-- [ ] getting new releases should run automatically once per day, not manually
 
 
 # GROUPS PAGE
@@ -69,18 +69,27 @@ How:
   - [x] edit button and backend functionality
 - [x] check every artist's lately(using specific date) released music
 - [x] add the songs into the previously selected playlist
+### 0.12
+- [x] create context and reducers for groups
+- [x] transfer group creation into the context
+- [x] delete group
+- [x] deleting group automatically removes artist from it as well
 ### TBD
-- [ ]
 
 
 # ARTISTS PAGE
 ### 0.11
 - [x] get followed artists
-- [ ] add option to unfollow(from Spotify)
-  - [ ] unfollowing means automatically removing artists from database as well
-- [ ] fix situation, after artist removal, clicking one more time on remove crashes the backend
+### 0.12
+- [x] fix after artist removal, clicking one more time on remove crashes the backend
+- [x] add option to unfollow(from Spotify)
+  - [x] backend/frontend services
+  - [x] unfollowing means automatically removing artists from database as well
+- [x] validateDOMNesting(...): <div> cannot appear as a child of <select>.
+- [x] refactoring of group selection process
+- [x] create context and reducers for artists manipulation
+- [x] transfer artist manipulation into the context
 ### TBD
-- [ ]
 
 
 # RELEASES PAGE
@@ -90,11 +99,22 @@ How:
 - [x] separate API calls for songs/albums with more details for this page
 - [x] option to list songs
 - [x] show song details - number/artists/name/duration
+### 0.12
+- [x] single button for toggling visibility
 ### TBD
-- [ ] single button for toggling visibility
 
+
+# SEARCH PAGE
+### TBD
+- [ ] search form getting specific artist's releases in last 30 days
 
 # OTHERS
+### 0.12
+- [x] fix refresh on specific page redirecting to homepage
+- [x] refetch data on page after some action(add, edit)
+- [x] divide the services/controllers better, some are not where they should be
 ### TBD
+- [ ] notifications for everything(so far)
 - [ ] custom hook that handles loading screen during API calls
-- [ ] divide the services/controllers better, some are not where they should be
+- [ ] listing artists/groups should filter per user
+- [ ] deleting/editing should filter artists/groups per user

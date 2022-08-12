@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
+import artistService from '../../services/artists.js'
+import RemoveGroup from './RemoveGroup.js'
 import '../../styles/components/Groups.css'
-import groupService from '../../services/groups.js'
 
 const SingleGroup = ({ group }) => {
   const [artistsOfGroup, setArtistsOfGroup] = useState([])
   useEffect(() => {
     const getData = async () => {
-      await groupService
+      await artistService
         .getArtistsFromGroups(group._id)
         .then(res => {
           setArtistsOfGroup(res)
@@ -17,6 +18,7 @@ const SingleGroup = ({ group }) => {
     }
     getData()
   }, [group._id])
+
   return (
     <>
       <div className="single-group" key={group._id}>
@@ -27,6 +29,7 @@ const SingleGroup = ({ group }) => {
             <div key={a._id}>{a.artistName}</div>
           ))}
         </div>
+        <RemoveGroup id={group._id} />
       </div>
       <br />
     </>

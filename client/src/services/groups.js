@@ -1,35 +1,28 @@
 import axios from 'axios'
+const httpLink = `http://localhost:3001/groups`
 
+//get groups
 const getGroups = async () => {
-  const response = await axios.get('http://localhost:3001/groups')
+  const response = await axios.get(`${httpLink}`)
   return response.data
 }
 
+//create group
 const createGroup = async content => {
-  const response = await axios.post('http://localhost:3001/groups', content)
+  const response = await axios.post(`${httpLink}`, content)
   return response.data
 }
 
-const getArtistsFromGroups = async id => {
-  const { data } = await axios.get(`http://localhost:3001/artists/group/${id}`)
-  return data
-}
-
-const checkIfArtistIsInGroup = async id => {
-  const { data } = await axios.get(`http://localhost:3001/artists/${id}`)
-  return data
-}
-
-const removeArtistFromGroup = async id => {
-  console.log('id', id)
-  const response = await axios.delete(`http://localhost:3001/artists/${id}`)
+//remove group tbd
+const removeGroup = async id => {
+  const response = await axios.delete(`${httpLink}/${id}`)
   return response.data
 }
+
+//edit group name tbd
 
 export default {
-  createGroup,
   getGroups,
-  getArtistsFromGroups,
-  checkIfArtistIsInGroup,
-  removeArtistFromGroup,
+  createGroup,
+  removeGroup,
 }

@@ -3,6 +3,7 @@ dotenv.config()
 
 const scopes = [
   'user-follow-read',
+  'user-follow-modify',
   'playlist-read-private',
   'playlist-modify-private',
 ]

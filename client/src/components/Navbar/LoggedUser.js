@@ -9,7 +9,7 @@ const LoggedUser = () => {
     if (accessToken) {
       const getData = async () => {
         await userService.getLoggedUser().then(res => {
-          setLoggedUser(res)
+          setLoggedUser(res.display_name)
         })
       }
       getData()

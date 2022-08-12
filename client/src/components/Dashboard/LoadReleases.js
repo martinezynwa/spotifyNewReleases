@@ -1,15 +1,22 @@
 import { useState } from 'react'
-import artistsService from '../../services/artists.js'
+import releaseService from '../../services/releases.js'
 import { accessToken } from '../../util/spotifyAuth.js'
+import userService from '../../services/user'
+import AlbumsAdded from './AlbumsAdded.js'
 
 const LoadReleases = () => {
   const [success, setSuccess] = useState(false)
   const [loadingTrigger, setLoadingTrigger] = useState(false)
+  const [albumsAdded, setAlbumsAdded] = useState([])
+
   const triggerAction = async () => {
     setLoadingTrigger(true)
-    await artistsService
-      .getNewReleases(accessToken)
+    const { id: userId } = await userService.getLoggedUser()
+
+    await releaseService
+      .getNewReleases(accessToken, userId)
       .then(res => {
+        setAlbumsAdded(res.data)
         setLoadingTrigger(false)
         setSuccess(true)
       })
@@ -17,12 +24,13 @@ const LoadReleases = () => {
         console.log(err.message)
       })
   }
+
   return (
     <>
       <div>
         <button onClick={() => triggerAction()}>Get New Releases</button>
         {loadingTrigger ? <p>Loading...</p> : null}
-        {success ? <p>Sucessfully loaded</p> : null}
+        {success ? <AlbumsAdded albums={albumsAdded} /> : null}
       </div>
     </>
   )

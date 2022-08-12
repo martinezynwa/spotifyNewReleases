@@ -7,7 +7,7 @@ axios.defaults.headers['Content-Type'] = 'application/json'
 
 const getLoggedUser = async () => {
   const response = await axios.get('/me')
-  return response.data.display_name
+  return response.data
 }
 
 const getUsersPlaylists = async () => {

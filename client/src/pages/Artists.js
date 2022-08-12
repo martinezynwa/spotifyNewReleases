@@ -1,11 +1,12 @@
-import FollowedArtists from '../components/Groups/FollowedArtists.js'
+import FollowedArtists from '../components/Artists/FollowedArtists.js'
+import { ArtistProvider } from '../context/ArtistContext.js'
 
 const Artists = () => {
   return (
     <>
-      <div>
+      <ArtistProvider>
         <FollowedArtists />
-      </div>
+      </ArtistProvider>
     </>
   )
 }

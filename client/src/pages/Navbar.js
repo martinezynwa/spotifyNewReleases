@@ -21,6 +21,9 @@ const Navbar = () => {
         <NavLink to="/releases">
           <h3>Releases</h3>
         </NavLink>
+        <NavLink to="/search">
+          <h3>Search</h3>
+        </NavLink>
         <button onClick={logout}>Log Out</button>
       </div>
     </>

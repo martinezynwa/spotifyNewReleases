@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import UserPlaylists from './UserPlaylists'
-import groupService from '../../services/groups.js'
+import useGroup from '../../context/GroupContext'
 
 const CreateGroup = () => {
+  const { addGroup } = useGroup()
   const initialState = {
     groupName: '',
     connectedPlaylist: '',
@@ -17,17 +18,17 @@ const CreateGroup = () => {
     })
   }
 
-  const addGroup = async event => {
+  const submitGroup = event => {
     event.preventDefault()
-
-    await groupService.createGroup(itemInput)
+    addGroup(itemInput)
+    setItemInput(initialState)
   }
 
   return (
     <>
       <div>
         <h3>Create Group</h3>
-        <form onSubmit={addGroup}>
+        <form onSubmit={submitGroup}>
           <div>
             <label>Group name</label>
             <input

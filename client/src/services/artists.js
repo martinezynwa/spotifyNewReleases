@@ -1,95 +1,45 @@
 import axios from 'axios'
 import { accessToken } from '../util/spotifyAuth.js'
 
-let nextToken = ''
+const httpLink = `http://localhost:3001/artists`
+
 axios.defaults.baseURL = 'https://api.spotify.com/v1'
 axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
 axios.defaults.headers['Content-Type'] = 'application/json'
 
-const getFollowedArtists = async () => {
-  let artistsArray = []
-
-  await axios.get('/me/following?type=artist&limit=50').then(res => {
-    artistsArray.push(...res.data.artists.items)
-    nextToken = res.data.artists.next
-  })
-
-  while (nextToken !== null) {
-    // eslint-disable-next-line no-loop-func
-    await axios.get(nextToken).then(res => {
-      artistsArray.push(...res.data.artists.items)
-      nextToken = res.data.artists.next
-    })
-  }
-  return artistsArray.sort((a, b) => a.name.localeCompare(b.name))
+//get artists filtered by group
+const getArtistsFromGroups = async id => {
+  const { data } = await axios.get(`${httpLink}/group/${id}`)
+  return data
 }
 
-const getArtistsAlbums = async () => {
-  let artistAlbums = []
-  await axios
-    .get(
-      '/artists/5tDjiBYUsTqzd0RkTZxK7u/albums?include_groups=album%2Csingle&limit=50',
-    )
-    .then(res => {
-      artistAlbums.push(...res.data.items)
-      nextToken = res.data.next
-    })
-
-  while (nextToken !== null) {
-    // eslint-disable-next-line no-loop-func
-    await axios.get(nextToken).then(res => {
-      artistAlbums.push(...res.data.items)
-      nextToken = res.data.next
-    })
-  }
-  return artistAlbums
+//get artist from specific group
+const checkIfArtistIsInGroup = async id => {
+  const { data } = await axios.get(`${httpLink}/${id}`)
+  return data
 }
 
-const getReleasedAlbums = async accessToken => {
-  const response = await axios.post(
-    'http://localhost:3001/artists/releases/albums',
-    {
-      accessToken,
-    },
-  )
-  return response
-}
-
-const getReleasedSongs = async (accessToken, album_id) => {
-  const response = await axios.post(
-    'http://localhost:3001/artists/releases/songs',
-    {
-      accessToken,
-      album_id,
-    },
-  )
-  return response
+//remove artist from group
+const removeArtistFromGroup = async id => {
+  const response = await axios.delete(`${httpLink}/group/${id}`)
+  return response.data
 }
 
 const addArtistToGroup = async content => {
-  const response = await axios.post('http://localhost:3001/artists', content)
+  const response = await axios.post(`${httpLink}/group`, content)
   return response
 }
 
-const editArtistGroup = async (_id, connectedGroup) => {
-  const content = { _id, connectedGroup }
-  const response = await axios.put('http://localhost:3001/artists', content)
-  return response
-}
-
-const getNewReleases = async accessToken => {
-  const response = await axios.post('http://localhost:3001/artists/releases', {
-    accessToken,
-  })
+const editArtistGroup = async (artistSpotifyId, connectedGroup) => {
+  const content = { artistSpotifyId, connectedGroup }
+  const response = await axios.put(`${httpLink}/group`, content)
   return response
 }
 
 export default {
-  getFollowedArtists,
-  getArtistsAlbums,
+  getArtistsFromGroups,
+  checkIfArtistIsInGroup,
+  removeArtistFromGroup,
   addArtistToGroup,
   editArtistGroup,
-  getNewReleases,
-  getReleasedAlbums,
-  getReleasedSongs,
 }

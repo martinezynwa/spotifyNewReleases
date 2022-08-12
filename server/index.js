@@ -4,6 +4,8 @@ import mongoose from 'mongoose'
 import loginRouter from './controllers/login.js'
 import groupRouter from './controllers/groups.js'
 import artistRouter from './controllers/artists.js'
+import releasesRouter from './controllers/releases.js'
+import spotifyRouter from './controllers/spotify.js'
 
 const PORT = 3001
 const app = express()
@@ -13,6 +15,8 @@ app.use(express.json())
 app.use('/', loginRouter)
 app.use('/groups', groupRouter)
 app.use('/artists', artistRouter)
+app.use('/releases', releasesRouter)
+app.use('/spotify', spotifyRouter)
 
 mongoose
   .connect(process.env.MONGODB_URI, {
