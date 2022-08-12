@@ -48,6 +48,7 @@ How:
 - [x] figure out logic on backend
 - [x] handle situation when two artists are listed as album/song creators
 - [x] handle duplicates(when following two artists that released one song together)
+### 0.12
 - [x] add group owner into the item input during group/artist creation
 - [x] lastFetchDate should be linked with user info from MongoDB
 - [x] figure out why is axios post not working sometimes
@@ -107,6 +108,7 @@ How:
 # SEARCH PAGE
 ### TBD
 - [ ] search form getting specific artist's releases in last 30 days
+
 
 # OTHERS
 ### 0.12
