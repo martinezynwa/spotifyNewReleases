@@ -86,7 +86,7 @@ How:
 - [x] add option to unfollow(from Spotify)
   - [x] backend/frontend services
   - [x] unfollowing means automatically removing artists from database as well
-- [x] validateDOMNesting(...): <div> cannot appear as a child of <select>.
+- [x] fix error validateDOMNesting(...): cannot appear as a child of
 - [x] refactoring of group selection process
 - [x] create context and reducers for artists manipulation
 - [x] transfer artist manipulation into the context
