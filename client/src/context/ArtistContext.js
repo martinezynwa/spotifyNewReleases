@@ -5,24 +5,26 @@ import React, {
   useState,
   useEffect,
 } from 'react'
+import groupService from '../services/groups'
 import spotifyService from '../services/spotify'
 import artistService from '../services/artists'
 import artistReducer from '../reducers/artistReducer'
-import userService from '../services/user'
+import useUser from '../context/UserContext'
 
 //context for artists
 const ArtistContext = createContext()
 
 export const ArtistProvider = ({ children }) => {
   const [state, dispatch] = useReducer(artistReducer, [])
-
   const [artists, setArtists] = useState([])
+  const [groups, setGroups] = useState([])
+  const { user } = useUser()
 
-  //getting all followed artists on load
+  //getting all followed artists from database on load
   useEffect(() => {
     const getData = async () => {
-      await spotifyService
-        .getFollowedArtists()
+      await artistService
+        .getArtistsFromDatabase(user.userId)
         .then(res => {
           setArtists(res)
         })
@@ -32,75 +34,84 @@ export const ArtistProvider = ({ children }) => {
     }
 
     getData()
-  }, [])
+  }, [user.userId])
 
-  //putting them into state
+  //putting artists into state
   useEffect(() => {
     dispatch({
-      type: 'ALL',
+      type: 'ALL_ARTISTS',
       artists,
     })
   }, [artists])
 
+  //getting all groups on load
+  useEffect(() => {
+    const getData = async () => {
+      await groupService
+        .getGroups(user.userId)
+        .then(res => {
+          setGroups(res)
+        })
+        .catch(err => {
+          console.log(err.message)
+        })
+    }
+
+    getData()
+  }, [user.userId])
+
+  //putting groups into state
+  useEffect(() => {
+    dispatch({
+      type: 'ALL_GROUPS',
+      groups,
+    })
+  }, [groups])
+
+  //sync followed artists from Spotify with database
+  const syncFollowedArtists = async () => {
+    await spotifyService
+      .syncFollowedArtists(user.userId)
+      .then(res => {
+        if (res.length !== 0) {
+          dispatch({
+            type: 'SYNC',
+            data: res,
+          })
+        } else {
+          console.log('No new artists followed')
+        }
+      })
+      .catch(err => {
+        console.log(err.message)
+      })
+  }
+
+  //remove unfollowed artists
+  const removeUnfollowed = async () => {
+    await spotifyService
+      .removeUnfollowed(user.userId)
+      .then(res => {
+        if (res.length !== 0) {
+          dispatch({
+            type: 'REMOVE_UNFOLLOWED',
+            data: res,
+          })
+        } else {
+          console.log('No difference')
+        }
+      })
+      .catch(err => {
+        console.log(err.message)
+      })
+  }
+
   //adding artist to group
   const addArtistToGroup = async artist => {
-    const { id: userId } = await userService.getLoggedUser()
-    const obj = {
-      artist,
-      userId,
-    }
     await artistService
-      .addArtistToGroup(obj)
+      .addArtistToGroup(artist)
       .then(res => {
-        dispatch({
-          type: 'ADD_TO_GROUP',
-          data: res.data,
-        })
-        console.log('res', res.data.connectedGroupName)
-      })
-      .catch(err => {
-        console.log(err.message)
-      })
-  }
-
-  //editing artist's gorup
-  const editArtistGroup = async (id, connectedGroup) => {
-    await artistService
-      .editArtistGroup(id, connectedGroup)
-      .then(res => {
-        console.log(res.data)
-      })
-      .catch(err => {
-        console.log(err.message)
-      })
-  }
-
-  //removing artist's group
-  const removeArtistFromGroup = async id => {
-    await artistService
-      .removeArtistFromGroup(id)
-      .then(res => {
-        dispatch({
-          type: 'REMOVE_FROM_GROUP',
-          id,
-        })
-        console.log('Removed from group')
-      })
-      .catch(err => {
-        console.log(err.message)
-      })
-  }
-
-  //unfollowing artist
-  const unfollowArtist = async (id, accessToken) => {
-    await spotifyService
-      .unfollowArtist({ id, accessToken })
-      .then(res => {
-        dispatch({
-          type: 'UNFOLLOW',
-          id,
-        })
-        console.log('Artist unfollowed')
+        console.log(res)
       })
       .catch(err => {
         console.log(err.message)
@@ -109,11 +120,12 @@ export const ArtistProvider = ({ children }) => {
 
   const value = {
     artists: state.artists,
+    groups: state.groups,
     addArtistToGroup,
-    editArtistGroup,
-    removeArtistFromGroup,
-    unfollowArtist,
+    syncFollowedArtists,
+    removeUnfollowed,
   }
+
   return (
     <ArtistContext.Provider value={value}>{children}</ArtistContext.Provider>
   )

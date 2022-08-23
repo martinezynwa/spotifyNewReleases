@@ -1,9 +1,12 @@
 import ReleasesList from '../components/Releases/ReleasesList'
+import { ReleaseProvider } from '../context/ReleaseContext.js'
 
 const Releases = () => {
   return (
     <>
-      <ReleasesList />
+      <ReleaseProvider>
+        <ReleasesList />
+      </ReleaseProvider>
     </>
   )
 }

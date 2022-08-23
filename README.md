@@ -25,7 +25,7 @@ How:
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!COMMENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-# AUTH
+# AUTH & USER
 ### 0.10
 - [x] register app on Spotify dev dashboard
 - [x] find out how Spotify auth works
@@ -36,6 +36,8 @@ How:
 - [x] saving tokens on frontend into localstorage
 - [x] timestamp creation to find out when token expires to refresh it
 - [x] token refresh if expired/logout part
+### 0.13
+- [x] User context
 ### TBD
 - [ ] check why is token not refreshed automatically
 
@@ -54,8 +56,10 @@ How:
 - [x] figure out why is axios post not working sometimes
   - [x] axios post to specific playlist may contain more than one item
 - [x] return what songs were added during the run from backend
+### 0.13
+- [x] list of what was added is shown on main page without having to run the action
 ### TBD
-
+- [ ]
 
 # GROUPS PAGE
 ### 0.11
@@ -75,8 +79,10 @@ How:
 - [x] transfer group creation into the context
 - [x] delete group
 - [x] deleting group automatically removes artist from it as well
+### 0.13
+- [x] show playlists that are owned by logged user only
 ### TBD
-
+- [ ]
 
 # ARTISTS PAGE
 ### 0.11
@@ -90,7 +96,12 @@ How:
 - [x] refactoring of group selection process
 - [x] create context and reducers for artists manipulation
 - [x] transfer artist manipulation into the context
+### 0.13
+- [x] re-do loading so it happens from database and not via API every time
+- [x] logic for manual synchronization database<-->Spotify
+- [x] logic for removing records from database if artist is unfollowed
 ### TBD
+- [ ] pagination/infinite scrolling
 
 
 # RELEASES PAGE
@@ -102,7 +113,13 @@ How:
 - [x] show song details - number/artists/name/duration
 ### 0.12
 - [x] single button for toggling visibility
+### 0.13
+- [x] show releases from last 30 days without having to call API every time
+- [x] releases added to database
+- [x] records older than 30 days should be deleted
+- [x] implement manual refresh as well
 ### TBD
+- [ ] pagination/infinite scrolling
 
 
 # SEARCH PAGE
@@ -115,8 +132,14 @@ How:
 - [x] fix refresh on specific page redirecting to homepage
 - [x] refetch data on page after some action(add, edit)
 - [x] divide the services/controllers better, some are not where they should be
+### 0.13
+- [x] albums and singles should be fetched separately
+- [x] listing artists/groups should filter per user
+- [x] deleting/editing should filter artists/groups per user
+- [x] fix Spotify error code 429
 ### TBD
-- [ ] notifications for everything(so far)
+- [ ] schedule getNewReleases to run automatically every night
+- [ ] schedule getReleasedAlbums to run automatically every night
+- [ ] schedule removeUnfollowed to run automatically every night
 - [ ] custom hook that handles loading screen during API calls
-- [ ] listing artists/groups should filter per user
-- [ ] deleting/editing should filter artists/groups per user
+- [ ] notifications for everything(so far)

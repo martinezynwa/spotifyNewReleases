@@ -1,40 +1,30 @@
 const artistReducer = (state, action) => {
   switch (action.type) {
-    case 'ALL':
+    case 'ALL_ARTISTS':
       return {
         ...state,
         artists: action.artists,
       }
-    case 'UNFOLLOW':
+    case 'ALL_GROUPS':
       return {
         ...state,
-        artists: state.artists.filter(a => a.id !== action.id),
+        groups: action.groups,
       }
-    case 'ADD_TO_GROUP':
+    case 'SYNC':
       return {
-        ...state,
-        artists: state.artists.map(a =>
-          a.id === action.data.artistSpotifyId
-            ? {
-                ...a,
-                connectedGroupId: action.data.connectedGroupId,
-                connectedGroupName: action.data.connectedGroupName,
-              }
-            : a,
-        ),
+        ...state.artists,
+        artists: state.artists
+          .concat(action.data)
+          .sort((a, b) => a.artistName.localeCompare(b.artistName)),
       }
-    case 'REMOVE_FROM_GROUP':
+    case 'REMOVE_UNFOLLOWED':
       return {
-        ...state,
-        artists: state.artists.map(a =>
-          a.id === action.id
-            ? {
-                ...a,
-                connectedGroupId: null,
-                connectedGroupName: null,
-              }
-            : a,
-        ),
+        ...state.artists,
+        artists: state.artists.filter(artist => {
+          return !action.data.find(state => {
+            return state.artistSpotifyId === artist.artistSpotifyId
+          })
+        }),
       }
     default:
       return state

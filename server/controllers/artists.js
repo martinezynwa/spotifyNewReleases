@@ -7,11 +7,19 @@ const Artist = require('../models/Artist.cjs')
 
 const router = express.Router()
 
-//get single artist from database
-router.get('/:id', async (req, res) => {
-  const artistSpotifyId = req.params.id
-  const artist = await Artist.findOne({ artistSpotifyId })
-  res.json(artist)
+//get artists from database
+router.get('/', async (req, res) => {
+  const { createdBy } = req.query
+  const artists = await Artist.find({ createdBy })
+  res.json(
+    artists
+      .sort((a, b) => a.artistName.localeCompare(b.artistName))
+      .sort((a, b) => {
+        a = a.connectedGroupName || ''
+        b = b.connectedGroupName || ''
+        return b.localeCompare(a)
+      }),
+  )
 })
 
 //get artists filtered by group
@@ -21,49 +29,36 @@ router.get('/group/:id', async (req, res) => {
   res.json(artists)
 })
 
-//add artist to a group
-router.post('/group', async (req, res) => {
-  const { artistName, artistSpotifyId, connectedGroup } = req.body.artist
-
-  const connectedGroupId = connectedGroup.split(',')[0]
-  const connectedGroupName = connectedGroup.split(',')[1]
-
-  const createdBy = req.body.userId
-
-  const createdAt = dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss')
-
-  const artistData = new Artist({
-    artistName,
-    artistSpotifyId,
-    connectedGroupId,
-    connectedGroupName,
-    createdBy,
-    createdAt,
-  })
-  const artistAdded = await artistData.save()
-  res.status(201).json(artistAdded)
-})
-
-//edit artist's group
+//change artist's group
 router.put('/group', async (req, res) => {
-  const { artistSpotifyId, connectedGroup } = req.body
+  const { _id, connectedGroup } = req.body
   const connectedGroupId = connectedGroup.split(',')[0]
   const connectedGroupName = connectedGroup.split(',')[1]
-  await Artist.findOneAndUpdate(artistSpotifyId, {
-    $set: {
-      connectedGroupId: connectedGroupId,
-      connectedGroupName: connectedGroupName,
-    },
-  })
-  res.json(connectedGroupName)
-})
 
-//remove artist from a group
-router.delete('/group/:id', async (req, res) => {
-  const artistSpotifyId = req.params.id
-  const { _id } = await Artist.findOne({ artistSpotifyId })
-  await Artist.findByIdAndRemove({ _id })
-  res.status(204).end()
+  if (connectedGroup === 'Not added') {
+    await Artist.findOneAndUpdate(
+      { _id },
+      {
+        $set: {
+          connectedGroupId: null,
+          connectedGroupName: null,
+        },
+      },
+    )
+    return 'Removed'
+  }
+
+  await Artist.findOneAndUpdate(
+    { _id },
+    {
+      $set: {
+        connectedGroupId: connectedGroupId,
+        connectedGroupName: connectedGroupName,
+      },
+    },
+  )
+
+  res.json(connectedGroup.split(',')[1])
 })
 
 export default router

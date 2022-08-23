@@ -6,22 +6,22 @@ import React, {
   useEffect,
 } from 'react'
 import groupService from '../services/groups'
-import userService from '../services/user'
 import groupReducer from '../reducers/groupReducer'
+import useUser from '../context/UserContext'
 
 //context for groups
 const GroupContext = createContext()
 
 export const GroupProvider = ({ children }) => {
   const [state, dispatch] = useReducer(groupReducer, [])
-
   const [groups, setGroups] = useState([])
+  const { user } = useUser()
 
   //getting all groups on load
   useEffect(() => {
     const getData = async () => {
       await groupService
-        .getGroups()
+        .getGroups(user.userId)
         .then(res => {
           setGroups(res)
         })
@@ -31,7 +31,7 @@ export const GroupProvider = ({ children }) => {
     }
 
     getData()
-  }, [])
+  }, [user.userId])
 
   //putting them into state
   useEffect(() => {
@@ -43,10 +43,9 @@ export const GroupProvider = ({ children }) => {
 
   //adding new group
   const addGroup = async newGroup => {
-    const { id: userId } = await userService.getLoggedUser()
     const obj = {
       newGroup,
-      userId,
+      userId: user.userId,
     }
     await groupService
       .createGroup(obj)
@@ -78,14 +77,10 @@ export const GroupProvider = ({ children }) => {
       })
   }
 
-  //editing name of group
-  const editGroupName = () => {}
-
   const value = {
     groups: state.groups,
     addGroup,
     removeGroup,
-    editGroupName,
   }
   return <GroupContext.Provider value={value}>{children}</GroupContext.Provider>
 }

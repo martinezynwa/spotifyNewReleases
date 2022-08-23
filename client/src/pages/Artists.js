@@ -1,11 +1,13 @@
-import FollowedArtists from '../components/Artists/FollowedArtists.js'
+import SyncArtists from '../components/Artists/SyncArtists.js'
+import AddedArtists from '../components/Artists/AddedArtists.js'
 import { ArtistProvider } from '../context/ArtistContext.js'
 
 const Artists = () => {
   return (
     <>
       <ArtistProvider>
-        <FollowedArtists />
+        <SyncArtists />
+        <AddedArtists />
       </ArtistProvider>
     </>
   )

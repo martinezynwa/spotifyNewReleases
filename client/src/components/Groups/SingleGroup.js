@@ -5,6 +5,7 @@ import '../../styles/components/Groups.css'
 
 const SingleGroup = ({ group }) => {
   const [artistsOfGroup, setArtistsOfGroup] = useState([])
+
   useEffect(() => {
     const getData = async () => {
       await artistService

@@ -8,7 +8,7 @@ import '../../styles/components/Releases.css'
 const SingleRelease = ({ artist }) => {
   const [songs, setSongs] = useState([])
 
-  const getSongs = async album_id => {
+  const getSongs = async albumId => {
     //button naming logic, when hiding, emptying the array of songs
     if (songs.length !== 0) {
       setSongs([])
@@ -17,7 +17,7 @@ const SingleRelease = ({ artist }) => {
 
     //API call to get songs from the album
     await releaseService
-      .getReleasedSongs(accessToken, album_id)
+      .getReleasedSongs(accessToken, albumId)
       .then(res => {
         setSongs(res.data)
       })
@@ -30,9 +30,9 @@ const SingleRelease = ({ artist }) => {
     <>
       <div className="releases-container">
         <div className="release">
-          {artist.artist_name} - {artist.album_name} - {artist.release_date} -{' '}
-          {artist.album_type}
-          <button onClick={() => getSongs(artist.album_id)}>
+          {artist.artistName} - {artist.albumName} - {artist.releaseDate} -{' '}
+          {artist.albumType}
+          <button onClick={() => getSongs(artist.albumId)}>
             {songs.length !== 0 ? 'Hide' : 'Show'}
           </button>
         </div>

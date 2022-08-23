@@ -2,8 +2,12 @@ import axios from 'axios'
 const httpLink = `http://localhost:3001/groups`
 
 //get groups
-const getGroups = async () => {
-  const response = await axios.get(`${httpLink}`)
+const getGroups = async userId => {
+  const response = await axios.get(`${httpLink}`, {
+    params: {
+      userId,
+    },
+  })
   return response.data
 }
 

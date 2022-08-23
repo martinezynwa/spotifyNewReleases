@@ -1,9 +1,8 @@
 const SongList = ({ songs }) => {
-  
-  const convertMs = duration_ms => {
-    const minutes = new Date(duration_ms).getMinutes()
+  const convertMs = songDuration => {
+    const minutes = new Date(songDuration).getMinutes()
     const seconds = () => {
-      let seconds = new Date(duration_ms).getSeconds()
+      let seconds = new Date(songDuration).getSeconds()
       if (seconds === 0) {
         return '00'
       }
@@ -19,9 +18,9 @@ const SongList = ({ songs }) => {
   return (
     <>
       {songs.map(s => (
-        <div key={s.song_name}>
-          {s.track_number} | {s.artists} | {s.song_name} |{' '}
-          {convertMs(s.duration_ms)}
+        <div key={(s.songNumber, s.songDuration)}>
+          {s.songNumber} | {s.songArtist} | {s.songName} |{' '}
+          {convertMs(s.songDuration)}
         </div>
       ))}
     </>

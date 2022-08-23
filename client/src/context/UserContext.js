@@ -1,43 +1,31 @@
-import React, {
-  useReducer,
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-} from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
 import { accessToken } from '../util/spotifyAuth.js'
-import userReducer from '../reducers/userReducer'
 import userService from '../services/user.js'
 
 //context for groups
 const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(userReducer, [])
-
-  const [user, setUser] = useState([])
+  const [user, setUser] = useState({})
 
   useEffect(() => {
     if (accessToken) {
       const getData = async () => {
         await userService.getLoggedUser().then(res => {
-          setUser(res)
+          setUser({
+            userId: res.id,
+            display_name: res.display_name,
+          })
         })
       }
       getData()
     }
   }, [])
 
-  useEffect(() => {
-    dispatch({
-      type: 'USER',
-      user,
-    })
-  }, [user])
-
   const value = {
-    user: state.user,
+    user: user,
   }
+
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
 

@@ -59,6 +59,7 @@ router.get('/callback', async (req, res) => {
             spotify_id: id,
             spotify_name: display_name,
             registeredAt: dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss'),
+            lastFetchDate: dayjs(new Date()).format('YYYY-MM-DD'),
           })
           await newUser.save()
         }

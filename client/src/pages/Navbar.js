@@ -1,14 +1,16 @@
 import { NavLink } from 'react-router-dom'
 import { accessToken } from '../util/spotifyAuth.js'
 import { logout } from '../util/spotifyAuth.js'
-import LoggedUser from '../components/Navbar/LoggedUser.js'
+import useUser from '../context/UserContext'
 import '../styles/pages/Navbar.css'
 
 const Navbar = () => {
+  const { user } = useUser()
+
   const navbar = !accessToken ? null : (
     <>
       <div className="nav-header">
-        <h2>{<LoggedUser /> ?? null}</h2>
+        <h2>{user ? user.display_name : null}</h2>
         <NavLink to="/">
           <h3>Dashboard</h3>
         </NavLink>

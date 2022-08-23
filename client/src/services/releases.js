@@ -11,16 +11,7 @@ const getNewReleases = async (accessToken, userId) => {
   const response = await axios.get(`${httpLink}/all`, {
     params: {
       accessToken,
-      userId
-    },
-  })
-  return response
-}
-
-const getReleasedAlbums = async accessToken => {
-  const response = await axios.get(`${httpLink}/albums`, {
-    params: {
-      accessToken,
+      userId,
     },
   })
   return response
@@ -36,8 +27,28 @@ const getReleasedSongs = async (accessToken, album_id) => {
   return response
 }
 
+const updateDatabaseWithReleases = async userId => {
+  const response = await axios.get(`${httpLink}/update`, {
+    params: {
+      accessToken,
+      userId,
+    },
+  })
+  return response
+}
+
+const getReleasesFromLast30Days = async userId => {
+  const response = await axios.get(`${httpLink}/database`, {
+    params: {
+      userId,
+    },
+  })
+  return response
+}
+
 export default {
   getNewReleases,
-  getReleasedAlbums,
   getReleasedSongs,
+  updateDatabaseWithReleases,
+  getReleasesFromLast30Days,
 }

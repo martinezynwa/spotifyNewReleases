@@ -7,26 +7,31 @@ axios.defaults.baseURL = 'https://api.spotify.com/v1'
 axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
 axios.defaults.headers['Content-Type'] = 'application/json'
 
-const getFollowedArtists = async () => {
-  const { data } = await axios.get(httpLink, {
+const syncFollowedArtists = async userId => {
+  if (!userId) {
+    return null
+  }
+
+  const { data } = await axios.get(`${httpLink}/sync`, {
     params: {
       accessToken,
+      userId,
     },
   })
   return data
 }
 
-const unfollowArtist = async content => {
-  const { id, accessToken } = content
-  const response = await axios.delete(`${httpLink}/${id}`, {
+const removeUnfollowed = async userId => {
+  const { data } = await axios.get(`${httpLink}/remove`, {
     params: {
       accessToken,
+      userId,
     },
   })
-  return response.data
+  return data
 }
 
 export default {
-  getFollowedArtists,
-  unfollowArtist,
+  syncFollowedArtists,
+  removeUnfollowed,
 }

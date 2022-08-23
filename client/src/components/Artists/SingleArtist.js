@@ -1,20 +1,17 @@
 import { useState } from 'react'
 import useArtist from '../../context/ArtistContext.js'
-import RemoveFromGroup from './RemoveFromGroup'
-import UnfollowButton from './UnfollowButton'
 import GroupSelection from '../Artists/GroupSelection'
 import '../../styles/components/Artists.css'
 
 const SingleArtist = ({ artist }) => {
   const initialState = {
-    artistName: artist.name,
-    artistSpotifyId: artist.id,
+    _id: artist._id,
     connectedGroup: '',
   }
 
   const [itemInput, setItemInput] = useState(initialState)
 
-  const { addArtistToGroup, editArtistGroup } = useArtist()
+  const { addArtistToGroup } = useArtist()
 
   const onChange = event => {
     setItemInput({
@@ -28,18 +25,14 @@ const SingleArtist = ({ artist }) => {
     if (!itemInput.connectedGroup) {
       return console.log('Nothing set')
     }
-    if (artist.connectedGroupId) {
-      editArtistGroup(artist.id, itemInput.connectedGroup)
-    } else {
-      addArtistToGroup(itemInput)
-    }
+    await addArtistToGroup(itemInput)
   }
 
   return (
     <>
       <div className="single-artist-container">
         <form className="single-artist" onSubmit={addToGroup}>
-          <p key={artist.id}>{artist.name}</p>
+          <p key={artist._id}>{artist.artistName}</p>
           <select
             type="text"
             name="connectedGroup"
@@ -49,8 +42,6 @@ const SingleArtist = ({ artist }) => {
           </select>
           <button>{artist.connectedGroupId ? 'Edit' : 'Add'}</button>
         </form>
-        {artist.connectedGroupName ? <RemoveFromGroup id={artist.id} /> : null}
-        <UnfollowButton id={artist.id} />
       </div>
     </>
   )

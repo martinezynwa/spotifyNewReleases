@@ -10,7 +10,7 @@ const router = express.Router()
 
 //get groups
 router.get('/', async (req, res) => {
-  const groups = await Group.find({})
+  const groups = await Group.find({ groupOwner: req.query.userId })
   res.json(groups)
 })
 

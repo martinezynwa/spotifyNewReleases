@@ -6,13 +6,13 @@ axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
 axios.defaults.headers['Content-Type'] = 'application/json'
 
 const getLoggedUser = async () => {
-  const response = await axios.get('/me')
-  return response.data
+  const { data } = await axios.get('/me')
+  return data
 }
 
 const getUsersPlaylists = async () => {
-  const response = await axios.get('/me/playlists')
-  return response.data.items
+  const { data } = await axios.get('/me/playlists')
+  return data.items
 }
 
 export default { getLoggedUser, getUsersPlaylists }
