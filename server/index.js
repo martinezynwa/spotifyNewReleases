@@ -9,7 +9,6 @@ import spotifyRouter from './controllers/spotify.js'
 import logRouter from './controllers/logs.js'
 import jobs from './util/jobs.js'
 
-const PORT = 3001
 const app = express()
 
 app.use(cors())
@@ -32,7 +31,7 @@ mongoose
     console.log('error connection to MongoDB:', error.message)
   })
 
-app.listen(PORT, () => {
-  console.log(`Server is running on PORT ${PORT}`)
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on PORT ${process.env.PORT}`)
   jobs.runJobs()
 })

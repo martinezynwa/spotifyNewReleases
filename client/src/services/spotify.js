@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { accessToken } from '../util/spotifyAuth.js'
 
-const httpLink = `http://localhost:3001/spotify`
+const httpLink = `${process.env.REACT_APP_SERVER_URI}/spotify`
 
 axios.defaults.baseURL = 'https://api.spotify.com/v1'
 axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`

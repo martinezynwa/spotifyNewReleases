@@ -48,7 +48,7 @@ const runJobs = () => {
 
     //step 2 - synchronize newly followed artists
     await axios
-      .get(`http://localhost:3001/spotify/sync`, {
+      .get(`${process.env.BACKEND_URI}/spotify/sync`, {
         params: {
           accessToken,
           userId: process.env.SPOTIFY_ID,
@@ -76,7 +76,7 @@ const runJobs = () => {
 
     //step 3 - remove unfollowed artists
     await axios
-      .get(`http://localhost:3001/spotify/remove`, {
+      .get(`${process.env.BACKEND_URI}/spotify/remove`, {
         params: {
           accessToken,
           userId: process.env.SPOTIFY_ID,
@@ -104,7 +104,7 @@ const runJobs = () => {
 
     //step 4 - get new releases
     await axios
-      .get(`http://localhost:3001/releases/all`, {
+      .get(`${process.env.BACKEND_URI}/releases/all`, {
         params: {
           accessToken,
           userId: process.env.SPOTIFY_ID,
@@ -132,7 +132,7 @@ const runJobs = () => {
 
     //step 5 - update releases page
     await axios
-      .get(`http://localhost:3001/releases/update`, {
+      .get(`${process.env.BACKEND_URI}/releases/update`, {
         params: {
           accessToken,
           userId: process.env.SPOTIFY_ID,

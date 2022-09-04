@@ -1,5 +1,5 @@
 import axios from 'axios'
-const httpLink = `http://localhost:3001/artists`
+const httpLink = `${process.env.REACT_APP_SERVER_URI}/artists`
 
 //get artists from database
 const getArtistsFromDatabase = async (createdBy, skip) => {

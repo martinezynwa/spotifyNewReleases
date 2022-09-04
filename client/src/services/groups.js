@@ -1,5 +1,5 @@
 import axios from 'axios'
-const httpLink = `http://localhost:3001/groups`
+const httpLink = `${process.env.REACT_APP_SERVER_URI}/groups`
 
 //get groups
 const getGroups = async userId => {

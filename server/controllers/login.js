@@ -121,7 +121,7 @@ router.get('/callback', async (request, response) => {
     refresh_token,
     expires_in,
   })
-  response.redirect(`http://localhost:3000/?${queryParams}`)
+  response.redirect(`${process.env.CLIENT_URI}/?${queryParams}`)
 })
 
 router.get('/refresh_token', async (request, response) => {
