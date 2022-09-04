@@ -9,18 +9,18 @@ const Artist = require('../models/Artist.cjs')
 const router = express.Router()
 
 //get groups
-router.get('/', async (req, res) => {
-  const groups = await Group.find({ groupOwner: req.query.userId })
+router.get('/', async (request, res) => {
+  const groups = await Group.find({ groupOwner: request.query.userId })
   res.json(groups)
 })
 
 //create group
-router.post('/', async (req, res) => {
-  let { groupName, connectedPlaylist } = req.body.newGroup
+router.post('/', async (request, response) => {
+  let { groupName, connectedPlaylist } = request.body.newGroup
   const connectedPlaylistId = connectedPlaylist.split(',')[0]
   const connectedPlaylistName = connectedPlaylist.split(',')[1]
 
-  const groupOwner = req.body.userId
+  const groupOwner = request.body.userId
 
   const createdAt = dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss')
 
@@ -33,12 +33,12 @@ router.post('/', async (req, res) => {
   })
 
   const addedGroup = await newGroup.save()
-  res.status(201).json(addedGroup)
+  response.status(201).json(addedGroup)
 })
 
 //remove group
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params
+router.delete('/:id', async (request, response) => {
+  const { id } = request.params
 
   //deletion of group
   await Group.findOneAndRemove({ _id: id })
@@ -46,7 +46,7 @@ router.delete('/:id', async (req, res) => {
   //deletion of asigned artists from the group
   await Artist.deleteMany({ connectedGroupId: id })
 
-  res.status(200).end('Group deleted')
+  response.status(200).end('Group deleted')
 })
 
 //edit group name tbd

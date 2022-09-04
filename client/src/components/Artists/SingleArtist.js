@@ -32,7 +32,7 @@ const SingleArtist = ({ artist }) => {
     <>
       <div className="single-artist-container">
         <form className="single-artist" onSubmit={addToGroup}>
-          <p key={artist._id}>{artist.artistName}</p>
+          <p>{artist.artistName}</p>
           <select
             type="text"
             name="connectedGroup"

@@ -3,24 +3,24 @@ const httpLink = `http://localhost:3001/groups`
 
 //get groups
 const getGroups = async userId => {
-  const response = await axios.get(`${httpLink}`, {
+  const { data } = await axios.get(`${httpLink}`, {
     params: {
       userId,
     },
   })
-  return response.data
+  return data
 }
 
 //create group
 const createGroup = async content => {
-  const response = await axios.post(`${httpLink}`, content)
-  return response.data
+  const { data } = await axios.post(`${httpLink}`, content)
+  return data
 }
 
 //remove group tbd
 const removeGroup = async id => {
-  const response = await axios.delete(`${httpLink}/${id}`)
-  return response.data
+  const { data } = await axios.delete(`${httpLink}/${id}`)
+  return data
 }
 
 //edit group name tbd

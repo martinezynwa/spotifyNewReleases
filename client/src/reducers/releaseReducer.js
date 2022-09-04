@@ -3,12 +3,12 @@ const releaseReducer = (state, action) => {
     case 'ALL':
       return {
         ...state,
-        releases: action.releases.sort(
-          //sorting by date + time, newest on top
-          (a, b) =>
-            b.releaseDate.replaceAll(/[-T:]/g, '') -
-            a.releaseDate.replaceAll(/[-T:]/g, ''),
-        ),
+        releases: action.releases,
+      }
+    case 'ADD_RELEASES':
+      return {
+        ...state,
+        releases: state.releases.concat(action.data),
       }
     case 'UPDATE':
       return {

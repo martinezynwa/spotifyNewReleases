@@ -21,8 +21,8 @@ const UserPlaylists = () => {
   return (
     <>
       <option value>Choose playlist</option>
-      {usersPlaylists.map(p => (
-        <option key={p.id} value={[p.id, p.name]}>
+      {usersPlaylists.map((p, i) => (
+        <option key={i} value={[p.id, p.name]}>
           {p.name}
         </option>
       ))}

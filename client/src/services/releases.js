@@ -8,42 +8,43 @@ axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
 axios.defaults.headers['Content-Type'] = 'application/json'
 
 const getNewReleases = async (accessToken, userId) => {
-  const response = await axios.get(`${httpLink}/all`, {
+  const { data } = await axios.get(`${httpLink}/all`, {
     params: {
       accessToken,
       userId,
     },
   })
-  return response
+  return data
 }
 
 const getReleasedSongs = async (accessToken, album_id) => {
-  const response = await axios.get(`${httpLink}/songs`, {
+  const { data } = await axios.get(`${httpLink}/songs`, {
     params: {
       accessToken,
       album_id,
     },
   })
-  return response
+  return data
 }
 
 const updateDatabaseWithReleases = async userId => {
-  const response = await axios.get(`${httpLink}/update`, {
+  const { data } = await axios.get(`${httpLink}/update`, {
     params: {
       accessToken,
       userId,
     },
   })
-  return response
+  return data
 }
 
-const getReleasesFromLast30Days = async userId => {
-  const response = await axios.get(`${httpLink}/database`, {
+const getReleasesFromLast30Days = async (userId, skip) => {
+  const { data } = await axios.get(`${httpLink}/database`, {
     params: {
       userId,
+      skip,
     },
   })
-  return response
+  return data
 }
 
 export default {

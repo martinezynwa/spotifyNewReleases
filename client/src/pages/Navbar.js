@@ -26,6 +26,9 @@ const Navbar = () => {
         <NavLink to="/search">
           <h3>Search</h3>
         </NavLink>
+        <NavLink to="/options">
+          <h3>Options</h3>
+        </NavLink>
         <button onClick={logout}>Log Out</button>
       </div>
     </>

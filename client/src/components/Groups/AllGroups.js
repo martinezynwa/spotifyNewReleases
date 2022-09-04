@@ -8,7 +8,9 @@ const AllGroups = () => {
     <>
       <div>
         <h2>Created Groups</h2>
-        {groups ? groups.map(g => <SingleGroup key={g._id} group={g} />) : null}
+        {groups
+          ? groups.map((g, i) => <SingleGroup key={i} group={g} />)
+          : null}
       </div>
     </>
   )

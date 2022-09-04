@@ -8,6 +8,7 @@ import React, {
 import groupService from '../services/groups'
 import groupReducer from '../reducers/groupReducer'
 import useUser from '../context/UserContext'
+import useNotification from '../context/NotificationContext'
 
 //context for groups
 const GroupContext = createContext()
@@ -16,6 +17,7 @@ export const GroupProvider = ({ children }) => {
   const [state, dispatch] = useReducer(groupReducer, [])
   const [groups, setGroups] = useState([])
   const { user } = useUser()
+  const { setNotification } = useNotification()
 
   //getting all groups on load
   useEffect(() => {
@@ -26,11 +28,15 @@ export const GroupProvider = ({ children }) => {
           setGroups(res)
         })
         .catch(err => {
-          console.log(err.message)
+          setNotification({
+            message: err.message,
+            style: 'error',
+          })
         })
     }
 
     getData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.userId])
 
   //putting them into state
@@ -54,10 +60,16 @@ export const GroupProvider = ({ children }) => {
           type: 'ADD',
           data: { newGroup: res },
         })
-        console.log(res.groupName)
+        setNotification({
+          message: `Group ${res.groupName} created`,
+          style: 'success',
+        })
       })
       .catch(err => {
-        console.log(err.message)
+        setNotification({
+          message: err.message,
+          style: 'error',
+        })
       })
   }
 
@@ -70,10 +82,16 @@ export const GroupProvider = ({ children }) => {
           type: 'REMOVE',
           data: id,
         })
-        console.log(res)
+        setNotification({
+          message: 'Group removed',
+          style: 'success',
+        })
       })
       .catch(err => {
-        console.log(err.message)
+        setNotification({
+          message: err.message,
+          style: 'error',
+        })
       })
   }
 

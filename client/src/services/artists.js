@@ -2,12 +2,17 @@ import axios from 'axios'
 const httpLink = `http://localhost:3001/artists`
 
 //get artists from database
-const getArtistsFromDatabase = async createdBy => {
-  const { data } = await axios.get(httpLink, {
-    params: {
-      createdBy,
-    },
-  })
+const getArtistsFromDatabase = async (createdBy, skip) => {
+  const { data } = await axios
+    .get(httpLink, {
+      params: {
+        createdBy,
+        skip,
+      },
+    })
+    .catch(err => {
+      console.log(err.response.data)
+    })
   return data
 }
 

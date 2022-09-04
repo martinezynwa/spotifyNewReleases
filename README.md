@@ -4,7 +4,6 @@ Why:
 
 - created for personal purposes
 - everytime new music is released, I listen to it, and if I like it, I add it into a playlist corresponding with the song's genre
-- I usually decide whether to add a song to my library after a couple of listens to it, so this helps me to differentiate new songs from already liked songs
 - Spotify's Release Radar shows released music every week, however it's not specific enough for me(sometimes artists are missing, songs are repeated, etc...)
 - only mobile app is showing released music by your followed artists
 - I wanted to automate this process, without having to manually add newly released songs to my playlists
@@ -21,10 +20,6 @@ How:
 
 ### PROGRESS
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!COMMENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 # AUTH & USER
 ### 0.10
 - [x] register app on Spotify dev dashboard
@@ -38,9 +33,10 @@ How:
 - [x] token refresh if expired/logout part
 ### 0.13
 - [x] User context
+### 0.14
+- [x] save refresh token into database
 ### TBD
-- [ ] check why is token not refreshed automatically
-
+- [ ] check why is token not refreshed automatically sometimes
 
 # DASHBOARD
 ### 0.10
@@ -100,9 +96,10 @@ How:
 - [x] re-do loading so it happens from database and not via API every time
 - [x] logic for manual synchronization database<-->Spotify
 - [x] logic for removing records from database if artist is unfollowed
+### 0.14
+- [x] infinite scrolling
 ### TBD
-- [ ] pagination/infinite scrolling
-
+- [ ]
 
 # RELEASES PAGE
 ### 0.11
@@ -118,8 +115,9 @@ How:
 - [x] releases added to database
 - [x] records older than 30 days should be deleted
 - [x] implement manual refresh as well
+### 0.14
+- [x] infinite scrolling
 ### TBD
-- [ ] pagination/infinite scrolling
 
 
 # SEARCH PAGE
@@ -137,9 +135,20 @@ How:
 - [x] listing artists/groups should filter per user
 - [x] deleting/editing should filter artists/groups per user
 - [x] fix Spotify error code 429
+### 0.14
+- [x] error handling on server for API calls towards Spotify
+  - [x] spotify controller
+  - [x] within songsAndAlbums
+  - [x] login controller
+- [x] error handling on client
+  - [x] spotify service
+  - [x] artist service
+  - [x] releases service
+- [x] notifications for everything(so far)
+- [x] custom hook that handles loading screen during API calls
+- [x] show errors on options page in case some happened during any task
+- [x] infinite scrolling as hook
+- [x] schedule tasks to run automatically every night
+- [x] logging of errors
+- [x] logging of jobs
 ### TBD
-- [ ] schedule getNewReleases to run automatically every night
-- [ ] schedule getReleasedAlbums to run automatically every night
-- [ ] schedule removeUnfollowed to run automatically every night
-- [ ] custom hook that handles loading screen during API calls
-- [ ] notifications for everything(so far)

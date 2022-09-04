@@ -10,6 +10,7 @@ import spotifyService from '../services/spotify'
 import artistService from '../services/artists'
 import artistReducer from '../reducers/artistReducer'
 import useUser from '../context/UserContext'
+import useNotification from '../context/NotificationContext'
 
 //context for artists
 const ArtistContext = createContext()
@@ -19,6 +20,7 @@ export const ArtistProvider = ({ children }) => {
   const [artists, setArtists] = useState([])
   const [groups, setGroups] = useState([])
   const { user } = useUser()
+  const { setNotification } = useNotification()
 
   //getting all followed artists from database on load
   useEffect(() => {
@@ -29,11 +31,15 @@ export const ArtistProvider = ({ children }) => {
           setArtists(res)
         })
         .catch(err => {
-          console.log(err.message)
+          setNotification({
+            message: err.message,
+            style: 'error',
+          })
         })
     }
 
     getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.userId])
 
   //putting artists into state
@@ -53,11 +59,15 @@ export const ArtistProvider = ({ children }) => {
           setGroups(res)
         })
         .catch(err => {
-          console.log(err.message)
+          setNotification({
+            message: err.message,
+            style: 'error',
+          })
         })
     }
 
     getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.userId])
 
   //putting groups into state
@@ -68,22 +78,50 @@ export const ArtistProvider = ({ children }) => {
     })
   }, [groups])
 
+  //get more artists(infinite scrolling)
+  const getMoreArtists = async skip => {
+    await artistService
+      .getArtistsFromDatabase(user.userId, skip)
+      .then(res => {
+        dispatch({
+          type: 'ADD_ARTISTS',
+          data: res,
+        })
+      })
+      .catch(err => {
+        setNotification({
+          message: err.message,
+          style: 'error',
+        })
+      })
+  }
+
   //sync followed artists from Spotify with database
   const syncFollowedArtists = async () => {
     await spotifyService
       .syncFollowedArtists(user.userId)
       .then(res => {
-        if (res.length !== 0) {
-          dispatch({
-            type: 'SYNC',
-            data: res,
+        if (res.length === 0) {
+          setNotification({
+            message: 'No difference',
+            style: 'success',
           })
-        } else {
-          console.log('No new artists followed')
+          return
         }
+        dispatch({
+          type: 'SYNC',
+          data: res,
+        })
+        setNotification({
+          message: `${res.length} new found`,
+          style: 'success',
+        })
       })
       .catch(err => {
-        console.log(err.message)
+        setNotification({
+          message: `${err.response.status}, ${err.response.data}`,
+          style: 'error',
+        })
       })
   }
 
@@ -92,17 +130,27 @@ export const ArtistProvider = ({ children }) => {
     await spotifyService
       .removeUnfollowed(user.userId)
       .then(res => {
-        if (res.length !== 0) {
-          dispatch({
-            type: 'REMOVE_UNFOLLOWED',
-            data: res,
+        if (res.length === 0) {
+          setNotification({
+            message: 'No difference',
+            style: 'success',
           })
-        } else {
-          console.log('No difference')
+          return
         }
+        dispatch({
+          type: 'REMOVE_UNFOLLOWED',
+          data: res,
+        })
+        setNotification({
+          message: `Removed: ${res.length} artists`,
+          style: 'success',
+        })
       })
       .catch(err => {
-        console.log(err.message)
+        setNotification({
+          message: `${err.response.status}, ${err.response.data}`,
+          style: 'error',
+        })
       })
   }
 
@@ -111,16 +159,24 @@ export const ArtistProvider = ({ children }) => {
     await artistService
       .addArtistToGroup(artist)
       .then(res => {
-        console.log(res)
+        console.log('res', res)
+        setNotification({
+          message: res === 'Removed' ? res : `Added to: ${res}`,
+          style: 'success',
+        })
       })
       .catch(err => {
-        console.log(err.message)
+        setNotification({
+          message: `${err.response.status}, ${err.response.data}`,
+          style: 'error',
+        })
       })
   }
 
   const value = {
     artists: state.artists,
     groups: state.groups,
+    getMoreArtists,
     addArtistToGroup,
     syncFollowedArtists,
     removeUnfollowed,

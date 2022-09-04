@@ -19,10 +19,10 @@ const SingleRelease = ({ artist }) => {
     await releaseService
       .getReleasedSongs(accessToken, albumId)
       .then(res => {
-        setSongs(res.data)
+        setSongs(res)
       })
       .catch(err => {
-        console.log(err.message)
+        console.log(`${err.response.status}, ${err.response.data}`)
       })
   }
 

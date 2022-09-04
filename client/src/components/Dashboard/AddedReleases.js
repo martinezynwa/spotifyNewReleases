@@ -12,8 +12,8 @@ const AddedReleases = () => {
             .filter(
               i => i.releaseDate.replace(/-/g, '') >= today.replace(/-/g, ''),
             )
-            .map(r => (
-              <p key={r._id}>
+            .map((r, i) => (
+              <p key={i}>
                 {r.albumName} │ {r.artistName} │ {r.albumType} │ {r.releaseDate}
               </p>
             ))

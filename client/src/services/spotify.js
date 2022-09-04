@@ -8,9 +8,7 @@ axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
 axios.defaults.headers['Content-Type'] = 'application/json'
 
 const syncFollowedArtists = async userId => {
-  if (!userId) {
-    return null
-  }
+  if (!userId) return
 
   const { data } = await axios.get(`${httpLink}/sync`, {
     params: {

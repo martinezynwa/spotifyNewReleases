@@ -1,21 +1,24 @@
 const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema({
-  spotify_id: {
+  username: {
     type: String,
   },
-  spotify_name: {
+  timestamp: {
     type: String,
   },
-  registeredAt: {
+  action : {
     type: String,
   },
-  lastFetchDate: {
+  message: {
     type: String,
   },
-  refreshToken: {
+  statusCode: {
+    type: String,
+  },
+  errorUrl: {
     type: String,
   },
 })
 
-module.exports = mongoose.model('User', schema)
+module.exports = mongoose.model('Log', schema)

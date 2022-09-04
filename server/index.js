@@ -6,6 +6,8 @@ import groupRouter from './controllers/groups.js'
 import artistRouter from './controllers/artists.js'
 import releasesRouter from './controllers/releases.js'
 import spotifyRouter from './controllers/spotify.js'
+import logRouter from './controllers/logs.js'
+import jobs from './util/jobs.js'
 
 const PORT = 3001
 const app = express()
@@ -17,6 +19,7 @@ app.use('/groups', groupRouter)
 app.use('/artists', artistRouter)
 app.use('/releases', releasesRouter)
 app.use('/spotify', spotifyRouter)
+app.use('/logs', logRouter)
 
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -29,4 +32,7 @@ mongoose
     console.log('error connection to MongoDB:', error.message)
   })
 
-app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`))
+app.listen(PORT, () => {
+  console.log(`Server is running on PORT ${PORT}`)
+  jobs.runJobs()
+})

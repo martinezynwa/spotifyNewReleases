@@ -3,25 +3,36 @@ import releaseService from '../../services/releases.js'
 import { accessToken } from '../../util/spotifyAuth.js'
 import userService from '../../services/user'
 import AlbumsAdded from './AlbumsAdded.js'
+import useNotification from '../../context/NotificationContext'
+import useLoading from '../../hooks/useLoading.js'
 
 const LoadReleases = () => {
   const [success, setSuccess] = useState(false)
-  const [loadingTrigger, setLoadingTrigger] = useState(false)
   const [albumsAdded, setAlbumsAdded] = useState([])
+  const { setNotification } = useNotification()
+  const { triggerLoading, LoadingProgress } = useLoading()
 
   const triggerAction = async () => {
-    setLoadingTrigger(true)
     const { id: userId } = await userService.getLoggedUser()
+    triggerLoading(true, 'Updating your playlists with new releases...')
 
     await releaseService
       .getNewReleases(accessToken, userId)
       .then(res => {
-        setAlbumsAdded(res.data)
-        setLoadingTrigger(false)
+        setAlbumsAdded(res)
         setSuccess(true)
+        setNotification({
+          message: res.length > 0 ? `Added ${res.length}` : 'Nothing added',
+          style: 'success',
+        })
+        triggerLoading(false)
       })
       .catch(err => {
-        console.log(err.message)
+        setNotification({
+          message: `${err.response.status}, ${err.response.data}`,
+          style: 'error',
+        })
+        triggerLoading(false)
       })
   }
 
@@ -29,7 +40,7 @@ const LoadReleases = () => {
     <>
       <div>
         <button onClick={() => triggerAction()}>Get New Releases</button>
-        {loadingTrigger ? <p>Loading...</p> : null}
+        <LoadingProgress />
         {success ? <AlbumsAdded albums={albumsAdded} /> : null}
       </div>
     </>

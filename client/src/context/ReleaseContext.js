@@ -8,6 +8,7 @@ import React, {
 import releaseService from '../services/releases'
 import releaseReducer from '../reducers/releaseReducer'
 import useUser from '../context/UserContext'
+import useNotification from '../context/NotificationContext'
 
 //context for releases
 const ReleaseContext = createContext()
@@ -16,6 +17,7 @@ export const ReleaseProvider = ({ children }) => {
   const [state, dispatch] = useReducer(releaseReducer, [])
   const [releases, setReleases] = useState([])
   const { user } = useUser()
+  const { setNotification } = useNotification()
 
   //getting all releases on load
   useEffect(() => {
@@ -23,13 +25,17 @@ export const ReleaseProvider = ({ children }) => {
       await releaseService
         .getReleasesFromLast30Days(user.userId)
         .then(res => {
-          setReleases(res.data)
+          setReleases(res)
         })
         .catch(err => {
-          console.log(err.message)
+          setNotification({
+            message: err.message,
+            style: 'error',
+          })
         })
     }
     getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.userId])
 
   //putting them into state
@@ -40,28 +46,57 @@ export const ReleaseProvider = ({ children }) => {
     })
   }, [releases])
 
+  //get more releases(infinite scrolling)
+  const getMoreReleases = async skip => {
+    await releaseService
+      .getReleasesFromLast30Days(user.userId, skip)
+      .then(res => {
+        dispatch({
+          type: 'ADD_RELEASES',
+          data: res,
+        })
+      })
+      .catch(err => {
+        setNotification({
+          message: err.message,
+          style: 'error',
+        })
+      })
+  }
+
   //updating releases
   const updateReleases = async () => {
     await releaseService
       .updateDatabaseWithReleases(user.userId)
       .then(res => {
-        if (res.data.length !== 0) {
+        if (res.length !== 0) {
           dispatch({
             type: 'UPDATE',
-            data: res.data,
+            data: res,
+          })
+          setNotification({
+            message: `${res.length} releases added`,
+            style: 'success',
           })
         } else {
-          console.log('No new releases')
+          setNotification({
+            message: 'No new releases found',
+            style: 'success',
+          })
         }
       })
       .catch(err => {
-        console.log(err.message)
+        setNotification({
+          message: `${err.response.status}, ${err.response.data}`,
+          style: 'error',
+        })
       })
   }
 
   const value = {
     releases: state.releases,
     updateReleases,
+    getMoreReleases,
   }
 
   return (

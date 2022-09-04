@@ -10,12 +10,19 @@ const artistReducer = (state, action) => {
         ...state,
         groups: action.groups,
       }
+    case 'ADD_ARTISTS':
+      return {
+        ...state.artists,
+        artists: state.artists.concat(action.data),
+      }
     case 'SYNC':
       return {
         ...state.artists,
-        artists: state.artists
-          .concat(action.data)
-          .sort((a, b) => a.artistName.localeCompare(b.artistName)),
+        artists: state.artists.concat(action.data).sort((a, b) => {
+          b = b.connectedGroupName || ''
+          a = a.connectedGroupName || ''
+          return a.localeCompare(b)
+        }),
       }
     case 'REMOVE_UNFOLLOWED':
       return {

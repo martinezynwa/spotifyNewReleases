@@ -5,34 +5,33 @@ import axios from 'axios'
 import express from 'express'
 import dayjs from 'dayjs'
 import Release from '../models/Release.cjs'
+import dataService from '../util/songsAndAlbums.js'
+import logService from '../util/logger.js'
 
 const Artist = require('../models/Artist.cjs')
-
 const router = express.Router()
 
 //synchronize account with followed artists
-router.get('/sync', async (req, res) => {
-  const { accessToken, userId } = req.query
+router.get('/sync', async (request, response) => {
+  const { accessToken, userId } = request.query
   axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
 
   let nextToken = ''
   let artistsArray = []
+  let firstFetch = true
 
   //getting followed artists from logged profile
-  const getItems = async nextToken => {
-    let res = []
+  const getItems = async () => {
+    firstFetch = false
 
     //next token becomes available in case 50+ artists are followed
-    if (!nextToken) {
-      res = await axios.get('/me/following?type=artist&limit=50')
-    } else {
-      res = await axios.get(nextToken)
-    }
+    const res = await dataService.getFollowedArtists(nextToken, userId)
+    if (res?.error) return res
 
-    const { items } = res.data.artists
+    nextToken = res.nextToken
 
     await Promise.all(
-      items.map(async i => {
+      res.items.map(async i => {
         //checking each artist if it's followed or not
         const artistInDatabase = await Artist.findOne({
           createdBy: userId,
@@ -54,27 +53,25 @@ router.get('/sync', async (req, res) => {
         }
       }),
     )
-
-    return res.data.artists.next
   }
-
-  //first fetch request
-  nextToken = await getItems()
 
   //attempting to fetch artists until nextToken becomes unavailable
-  while (nextToken !== null) {
-    nextToken = await getItems(nextToken)
-  }
+  while (nextToken !== null || firstFetch === true) {
+    const res = await getItems()
 
+    if (res?.error) {
+      return response.status(res.status).json(res.message)
+    }
+  }
   //returning only newly followed artists back to client
-  res.json(
+  response.json(
     artistsArray.sort((a, b) => a.artistName.localeCompare(b.artistName)),
   )
 })
 
 //remove unfollowed artists
-router.get('/remove', async (req, res) => {
-  const { accessToken, userId } = req.query
+router.get('/remove', async (request, response) => {
+  const { accessToken, userId } = request.query
   axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
 
   //get artists count from database
@@ -85,32 +82,33 @@ router.get('/remove', async (req, res) => {
   //get followed artists from spotify
   let nextToken = ''
   let artistsFromSpotify = []
+  let firstFetch = true
 
-  //get followed Artists on Spotify
-  const getItems = async nextToken => {
-    let res = []
+  //getting followed artists from logged profile
+  const getItems = async () => {
+    firstFetch = false
 
-    if (!nextToken) {
-      res = await axios.get('/me/following?type=artist&limit=50')
-    } else {
-      res = await axios.get(nextToken)
-    }
+    //getting followed artists
+    const res = await dataService.getFollowedArtists(nextToken, userId)
+    if (res?.error) return res
 
-    const { items } = res.data.artists
+    nextToken = res.nextToken
 
-    items.map(i => {
+    res.items.map(i => {
       artistsFromSpotify.push({
         artistSpotifyId: i.id,
       })
     })
 
-    return res.data.artists.next
+    return res.nextToken
   }
 
-  nextToken = await getItems()
-
-  while (nextToken !== null) {
-    nextToken = await getItems(nextToken)
+  //attempting to fetch artists until nextToken becomes unavailable
+  while (nextToken !== null || firstFetch === true) {
+    const res = await getItems()
+    if (res?.error) {
+      return response.status(res.status).json(res.message)
+    }
   }
 
   //compare amount
@@ -145,9 +143,10 @@ router.get('/remove', async (req, res) => {
       )
     }
     //returns what was removed
-    return res.json(artistsFromDatabase)
+    return response.json(artistsFromDatabase)
   }
-  return res.json()
+
+  return response.json()
 })
 
 export default router
