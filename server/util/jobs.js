@@ -8,7 +8,7 @@ import logService from '../util/logger.js'
 const User = require('../models/User.cjs')
 
 const runJobs = () => {
-  schedule.scheduleJob('* 01 * * * ', async () => {
+  schedule.scheduleJob('00 01 * * * ', async () => {
     let accessToken = ''
 
     //step 1 - getting new access token from refresh token
