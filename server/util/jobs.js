@@ -1,18 +1,19 @@
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
 
-import schedule from 'node-schedule'
 import axios from 'axios'
 import logService from '../util/logger.js'
-
+const cron = require('node-cron')
 const User = require('../models/User.cjs')
 
-const runJobs = () => {
-  schedule.scheduleJob('00 01 * * * ', async () => {
+const runJobs = async () => {
+  const user = await User.find({ spotify_id: process.env.SPOTIFY_ID })
+  const scheduleDate = user[0].customSchedule
+
+  cron.schedule(scheduleDate, async () => {
     let accessToken = ''
 
     //step 1 - getting new access token from refresh token
-    const user = await User.find({ spotify_id: process.env.SPOTIFY_ID })
     await axios({
       method: 'post',
       url: 'https://accounts.spotify.com/api/token',

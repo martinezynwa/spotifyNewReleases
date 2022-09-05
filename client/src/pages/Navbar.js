@@ -2,14 +2,14 @@ import { NavLink } from 'react-router-dom'
 import { accessToken } from '../util/spotifyAuth.js'
 import { logout } from '../util/spotifyAuth.js'
 import useUser from '../context/UserContext'
-import '../styles/pages/Navbar.css'
+import '../style.css'
 
 const Navbar = () => {
   const { user } = useUser()
 
   const navbar = !accessToken ? null : (
     <>
-      <div className="nav-header">
+      <aside className='w-60'>
         <h2>{user ? user.display_name : null}</h2>
         <NavLink to="/">
           <h3>Dashboard</h3>
@@ -30,7 +30,7 @@ const Navbar = () => {
           <h3>Options</h3>
         </NavLink>
         <button onClick={logout}>Log Out</button>
-      </div>
+      </aside>
     </>
   )
   return navbar

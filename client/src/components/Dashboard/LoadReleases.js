@@ -38,11 +38,11 @@ const LoadReleases = () => {
 
   return (
     <>
-      <div>
+      <>
         <button onClick={() => triggerAction()}>Get New Releases</button>
         <LoadingProgress />
         {success ? <AlbumsAdded albums={albumsAdded} /> : null}
-      </div>
+      </>
     </>
   )
 }

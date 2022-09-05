@@ -6,6 +6,7 @@ import express from 'express'
 import dayjs from 'dayjs'
 import dataService from '../util/songsAndAlbums.js'
 import { day30DaysAgo } from '../util/day30DaysAgo.js'
+import jobs from '../util/jobs.js'
 
 const Release = require('../models/Release.cjs')
 const User = require('../models/User.cjs')
@@ -92,6 +93,22 @@ router.get('/database', async (request, response) => {
     .skip(skip ? skip : 0)
     .limit(30)
   response.json(releases)
+})
+
+//change scheduler
+router.put('/scheduler', async (request, response) => {
+  const { userId, schedule } = request.body.params
+
+  await User.findOneAndUpdate(
+    { spotify_id: userId },
+    {
+      $set: {
+        customSchedule: schedule,
+      },
+    },
+  )
+  jobs.runJobs()
+  response.json('set')
 })
 
 export default router

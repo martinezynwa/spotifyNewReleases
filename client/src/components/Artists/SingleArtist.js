@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import useArtist from '../../context/ArtistContext.js'
 import GroupSelection from '../Artists/GroupSelection'
-import '../../styles/components/Artists.css'
 
 const SingleArtist = ({ artist }) => {
   const initialState = {
@@ -30,8 +29,8 @@ const SingleArtist = ({ artist }) => {
 
   return (
     <>
-      <div className="single-artist-container">
-        <form className="single-artist" onSubmit={addToGroup}>
+      <div>
+        <form onSubmit={addToGroup}>
           <p>{artist.artistName}</p>
           <select
             type="text"

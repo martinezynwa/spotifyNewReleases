@@ -1,0 +1,20 @@
+/*@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+@layer base {
+  html,
+  body,
+  #root {
+    @apply h-full bg-backdrop text-white;
+  }
+
+  #root {
+    @apply flex flex-col;
+  }
+
+  .wrapper {
+    @apply flex h-full
+  }
+}
+*/

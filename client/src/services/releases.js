@@ -47,9 +47,20 @@ const getReleasesFromLast30Days = async (userId, skip) => {
   return data
 }
 
+const setScheduler = async (userId, schedule) => {
+  const { data } = await axios.put(`${httpLink}/scheduler`, {
+    params: {
+      userId,
+      schedule,
+    },
+  })
+  return data
+}
+
 export default {
   getNewReleases,
   getReleasedSongs,
   updateDatabaseWithReleases,
   getReleasesFromLast30Days,
+  setScheduler,
 }

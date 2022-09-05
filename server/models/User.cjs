@@ -16,6 +16,9 @@ const schema = new mongoose.Schema({
   refreshToken: {
     type: String,
   },
+  customSchedule: {
+    type: String,
+  },
 })
 
 module.exports = mongoose.model('User', schema)

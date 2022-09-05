@@ -4,12 +4,12 @@ import { ReleaseProvider } from '../context/ReleaseContext.js'
 
 const Dashboard = () => {
   return (
-    <>
+    <div class='content'>
       <ReleaseProvider>
         <LoadReleases />
         <AddedReleases />
       </ReleaseProvider>
-    </>
+    </div>
   )
 }
 

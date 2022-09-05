@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import artistService from '../../services/artists.js'
 import RemoveGroup from './RemoveGroup.js'
-import '../../styles/components/Groups.css'
 
 const SingleGroup = ({ group }) => {
   const [artistsOfGroup, setArtistsOfGroup] = useState([])
@@ -22,7 +21,7 @@ const SingleGroup = ({ group }) => {
 
   return (
     <>
-      <div className="single-group" key={group._id}>
+      <div key={group._id}>
         <div>{group.groupName}</div>
         <div>{group.connectedPlaylistName}</div>
         <div>

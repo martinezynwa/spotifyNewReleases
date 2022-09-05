@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { accessToken } from '../../util/spotifyAuth.js'
 import releaseService from '../../services/releases.js'
 import SongList from './SongList.js'
-import '../../styles/components/Releases.css'
 
 //Component showing songs inside album
 const SingleRelease = ({ artist }) => {
@@ -28,8 +27,8 @@ const SingleRelease = ({ artist }) => {
 
   return (
     <>
-      <div className="releases-container">
-        <div className="release">
+      <div>
+        <div>
           {artist.artistName} - {artist.albumName} - {artist.releaseDate} -{' '}
           {artist.albumType}
           <button onClick={() => getSongs(artist.albumId)}>
