@@ -16,21 +16,23 @@ const Navbar = () => {
   const inactiveLink =
     'flex h-10 gap-x-4 items-center text-sm font-semibold text-link hover:text-white px-4 mx-2 rounded'
 
-  const toggleNavbar = () => setMobileNavbar(!mobileNavbar)
+  const toggleNavbar = () => {
+    setMobileNavbar(!mobileNavbar)
+  }
 
   const navbar = !accessToken ? null : (
     <>
       <div
         className={`${
           !mobileNavbar
-            ? 'flex flex-row justify-between ml-6 mt-4 text-gray-100 md:hidden'
+            ? 'flex flex-row justify-between ml-4 mt-4 text-gray-100 md:hidden'
             : ' '
         }`}>
         <NavLink to="/">
           <img
             src={logo}
             alt=""
-            className={`${!mobileNavbar ? 'h-10 my-4' : 'h-10 my-4 ml-4 mt-8'}`}
+            className={`${!mobileNavbar ? 'h-12 my-4' : 'h-12 my-4 ml-4 mt-8'}`}
           />
         </NavLink>
         <button
@@ -43,7 +45,7 @@ const Navbar = () => {
       <aside
         className={`${
           !mobileNavbar ? 'w-0 ' : 'w-full '
-        }fixed h-full bg-black md:w-72 md:left-0 md:top-0`}>
+        }fixed h-full bg-black duration-75 ease-in-out md:w-72 md:left-0 md:top-0`}>
         <NavLink to="/">
           <img
             src={logo}
@@ -57,7 +59,7 @@ const Navbar = () => {
             !mobileNavbar ? ' hidden' : 'mt-10 space-y-6'
           }`}>
           <NavLink
-            onClick={() => setMobileNavbar(!mobileNavbar)}
+            onClick={mobileNavbar ? () => toggleNavbar() : ''}
             to="/"
             className={({ isActive }) =>
               isActive ? activeLink : inactiveLink
@@ -71,7 +73,7 @@ const Navbar = () => {
             <p>Dashboard</p>
           </NavLink>
           <NavLink
-            onClick={() => setMobileNavbar(!mobileNavbar)}
+            onClick={mobileNavbar ? () => toggleNavbar() : ''}
             to="/releases"
             className={({ isActive }) =>
               isActive ? activeLink : inactiveLink
@@ -85,7 +87,7 @@ const Navbar = () => {
             <p>Releases</p>
           </NavLink>
           <NavLink
-            onClick={() => setMobileNavbar(!mobileNavbar)}
+            onClick={mobileNavbar ? () => toggleNavbar() : ''}
             to="/groups"
             className={({ isActive }) =>
               isActive ? activeLink : inactiveLink
@@ -100,7 +102,7 @@ const Navbar = () => {
           </NavLink>
 
           <NavLink
-            onClick={() => setMobileNavbar(!mobileNavbar)}
+            onClick={mobileNavbar ? () => toggleNavbar() : ''}
             to="/options"
             className={({ isActive }) =>
               isActive ? activeLink : inactiveLink

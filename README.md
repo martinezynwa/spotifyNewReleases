@@ -46,9 +46,14 @@ How:
   - [x] Login page
   - [x] Notifications
 ### TBD
+- [ ] mobile - button size on group
+- [ ] mobile - groups, during edit action, notification is up top
+- [ ] mobile - bigger logo on header
+- [ ] go back button
 - [ ] figure out unnecessary re-renders
+- [ ] when returning from release that is very low, it should return to the same place, not to the top
 - [ ] some records are released during the day and not at midnight, add function to check the previous day as well
-
+- [ ] create test version
 
 
 # AUTH & USER

@@ -32,7 +32,7 @@ const GroupPage = () => {
     <>
       <div>
         <div
-          className={`flex flex-col pt-10 md:pt-20 px-4 h-52 md:h-72 bg-gradient-to-b ${colors[background]} to-black`}>
+          className={`flex flex-col pt-10 md:pt-20 px-4 h-56 md:h-72 bg-gradient-to-b ${colors[background]} to-black`}>
           <h2 className="text-4xl md:text-7xl font-bold mb-3">
             {group.groupName ? group.groupName : 'Unassigned'}
           </h2>
