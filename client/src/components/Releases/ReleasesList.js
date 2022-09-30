@@ -20,7 +20,7 @@ const ReleasesList = () => {
     action()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadMore])
-  console.log('releases :>> ', releases)
+
   return (
     <>
       <div>
