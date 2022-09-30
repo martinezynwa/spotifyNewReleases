@@ -340,10 +340,15 @@ const addReleasesToDatabase = async userId => {
       filteredReleases.push(...items)
     }
 
+    filteredReleases = filteredReleases.filter(
+      (record, index, array) =>
+        array.findIndex(record2 => record2.name === record.name) === index,
+    )
+
     await Promise.all(
       filteredReleases.map(async release => {
         const alreadyInDatabase = await Release.find({
-          albumId: release.id,
+          albumName: release.name,
           createdBy: userId,
         }).count()
 

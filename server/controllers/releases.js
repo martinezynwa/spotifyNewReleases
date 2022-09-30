@@ -116,9 +116,9 @@ router.get('/update', async (request, response) => {
 router.get('/database', async (request, response) => {
   const { userId, skip } = request.query
   const releases = await Release.find({ createdBy: userId })
-    .sort({ releaseDate: -1 })
     .skip(skip ? skip : 0)
-    .limit(20)
+    .sort({ releaseDate: -1, artistName: 1 })
+    .limit(30)
   response.json(releases)
 })
 
