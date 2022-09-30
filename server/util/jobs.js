@@ -8,8 +8,7 @@ const cron = require('node-cron')
 const User = require('../models/User.cjs')
 
 const initJobs = async () => {
-  const runEveryDay = cron.schedule('56 00 08 * * *', async () => {
-    console.log('Started')
+  const runEveryDay = cron.schedule('00 00 05 * * *', async () => {
     let accessToken = ''
 
     await logService.addLogToDatabase({

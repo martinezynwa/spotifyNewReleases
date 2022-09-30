@@ -16,21 +16,7 @@ const Navbar = () => {
   const inactiveLink =
     'flex h-10 gap-x-4 items-center text-sm font-semibold text-link hover:text-white px-4 mx-2 rounded'
 
-  const toggleNavbar = () => setMobileNavbar(true)
-  const btnRef = useRef()
-  const asideRef = useRef()
-
-  useEffect(() => {
-    if (mobileNavbar) {
-      const hideNavbar = e => {
-        if (e.path[0] !== btnRef.current && e.path[0] !== asideRef.current) {
-          setMobileNavbar(false)
-        }
-      }
-      document.body.addEventListener('click', hideNavbar)
-      return () => document.body.removeEventListener('click,', hideNavbar)
-    }
-  }, [mobileNavbar])
+  const toggleNavbar = () => setMobileNavbar(!mobileNavbar)
 
   const navbar = !accessToken ? null : (
     <>
@@ -50,15 +36,14 @@ const Navbar = () => {
         <button
           className={!mobileNavbar ? 'mr-6' : 'hidden'}
           onClick={() => toggleNavbar()}>
-          <img src={menu} alt="" ref={btnRef} />
+          <img src={menu} alt="" />
         </button>
       </div>
 
       <aside
-        ref={asideRef}
         className={`${
-          !mobileNavbar ? 'w-0 ' : 'w-72 '
-        }fixed h-full bg-black duration-75 ease-in-out md:w-72 md:left-0 md:top-0`}>
+          !mobileNavbar ? 'w-0 ' : 'w-full '
+        }fixed h-full bg-black md:w-72 md:left-0 md:top-0`}>
         <NavLink to="/">
           <img
             src={logo}
@@ -72,6 +57,7 @@ const Navbar = () => {
             !mobileNavbar ? ' hidden' : 'mt-10 space-y-6'
           }`}>
           <NavLink
+            onClick={() => setMobileNavbar(!mobileNavbar)}
             to="/"
             className={({ isActive }) =>
               isActive ? activeLink : inactiveLink
@@ -85,6 +71,7 @@ const Navbar = () => {
             <p>Dashboard</p>
           </NavLink>
           <NavLink
+            onClick={() => setMobileNavbar(!mobileNavbar)}
             to="/releases"
             className={({ isActive }) =>
               isActive ? activeLink : inactiveLink
@@ -98,6 +85,7 @@ const Navbar = () => {
             <p>Releases</p>
           </NavLink>
           <NavLink
+            onClick={() => setMobileNavbar(!mobileNavbar)}
             to="/groups"
             className={({ isActive }) =>
               isActive ? activeLink : inactiveLink
@@ -112,6 +100,7 @@ const Navbar = () => {
           </NavLink>
 
           <NavLink
+            onClick={() => setMobileNavbar(!mobileNavbar)}
             to="/options"
             className={({ isActive }) =>
               isActive ? activeLink : inactiveLink
