@@ -57,8 +57,8 @@ const Navbar = () => {
       <aside
         ref={asideRef}
         className={`${
-          !mobileNavbar ? 'w-0 ' : 'w-full '
-        }fixed h-full bg-black duration-200 ease-in-out md:w-72 md:left-0 md:top-0`}>
+          !mobileNavbar ? 'w-0 ' : 'w-72 '
+        }fixed h-full bg-black duration-75 ease-in-out md:w-72 md:left-0 md:top-0`}>
         <NavLink to="/">
           <img
             src={logo}
