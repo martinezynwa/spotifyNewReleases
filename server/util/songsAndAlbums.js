@@ -2,7 +2,7 @@ import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
 
 import axios from 'axios'
-import { day30DaysAgo } from '../util/day30DaysAgo.js'
+import { day60DaysAgo } from '../util/day60DaysAgo.js'
 import logService from '../util/logger.js'
 
 const Artist = require('../models/Artist.cjs')
@@ -38,6 +38,8 @@ const getFollowedArtists = async (nextToken, userId) => {
 
 //getting album ID's when fetching new releases
 const getAlbums = async (lastFetchDate, userId) => {
+  let counter = 0
+  let totalCounter = 0
   const artistsArray = []
   let singleArtist = {}
 
@@ -45,30 +47,47 @@ const getAlbums = async (lastFetchDate, userId) => {
     createdBy: userId,
   })
   artists = artists.filter(a => a.connectedGroupId !== null)
-
   //getting album/single releases for artist
   const filterReleases = async artist => {
     let filteredReleases = []
 
     for (let groupType of ['album', 'single']) {
+      counter = counter + 1
+      totalCounter = totalCounter + 1
       let items = []
 
       const res = await axios
         .get(
           `/artists/${artist.artistSpotifyId}/albums?include_groups=${groupType}&limit=5`,
         )
-        .then(res => {
+        .then(async res => {
+          if (counter === 100) {
+            await logService.addLogToDatabase({
+              username: userId,
+              action: 'counterinfo in filterReleases',
+              message: `Processed: ${totalCounter} items`,
+            })
+            counter = 0
+          }
           items = res.data.items
         })
         .catch(async err => {
           await logService.addLogToDatabase({
             username: userId,
             action: 'filterReleases',
+            message: err.response,
+            status: '',
+            baseUrl: '',
+            url: '',
+          })
+          /*          await logService.addLogToDatabase({
+            username: userId,
+            action: 'filterReleases',
             message: err.response.data.error.message,
             status: err.response.data.error.status,
             baseUrl: err.config.baseURL,
             url: err.config.url,
-          })
+          })*/
           return {
             error: true,
             status: err.response.data.error?.status || err.response.status,
@@ -112,18 +131,21 @@ const getAlbums = async (lastFetchDate, userId) => {
     }
   }
 
-  for (let artist of artists) {
-    const res = await filterReleases(artist)
-    if (res?.error) return res
+  const delay = () => {
+    return new Promise((resolve, reject) => setTimeout(resolve, 1000))
   }
 
+  for (let artist of artists) {
+    const res = await filterReleases(artist)
+    await delay()
+    if (res?.error) return res
+  }
   return artistsArray
 }
 
 //getting song ID's from albums when fetching new releases
 const getSongsOfAlbums = async (albums, userId) => {
   let songsArray = []
-
   //getting tracks from album
   const response = await Promise.all(
     albums.map(async a => {
@@ -166,7 +188,6 @@ const getSongsOfAlbums = async (albums, userId) => {
   const filtered = songsArray.filter(
     ({ song_id }, index) => !ids.includes(song_id, index + 1),
   )
-
   return filtered
 }
 
@@ -227,7 +248,7 @@ const getSongs = async album_id => {
     })
     .catch(async err => {
       await logService.addLogToDatabase({
-        username: userId,
+        username: '',
         action: 'getSongs',
         message: err.response.data.error.message,
         status: err.response.data.error.status,
@@ -263,6 +284,8 @@ const getSongs = async album_id => {
 }
 
 const addReleasesToDatabase = async userId => {
+  let counter = 0
+  let totalCounter = 0
   const allNewReleases = []
   const artists = await Artist.find({ createdBy: userId })
 
@@ -274,11 +297,21 @@ const addReleasesToDatabase = async userId => {
 
     //check album/single releases
     for (let groupType of ['album', 'single']) {
+      counter = counter + 1
+      totalCounter = totalCounter + 1
       const response = await axios
         .get(
           `/artists/${artist.artistSpotifyId}/albums?include_groups=${groupType}&limit=5`,
         )
-        .then(res => {
+        .then(async res => {
+          if (counter === 100) {
+            await logService.addLogToDatabase({
+              username: userId,
+              action: 'counterinfo in addReleasesToDatabase',
+              message: `Processed: ${totalCounter} items`,
+            })
+            counter = 0
+          }
           items = res.data.items
         })
         .catch(async err => {
@@ -300,9 +333,9 @@ const addReleasesToDatabase = async userId => {
 
       if (response?.error) return response
 
-      //filter older than 30 days
+      //filter older than 60 days
       items = items.filter(
-        i => i.release_date.replace(/-/g, '') > day30DaysAgo.replace(/-/g, ''),
+        i => i.release_date.replace(/-/g, '') > day60DaysAgo.replace(/-/g, ''),
       )
       filteredReleases.push(...items)
     }
@@ -360,6 +393,14 @@ const addReleasesToDatabase = async userId => {
     const response = await filterReleases(artist)
     if (response?.error) return response
   }
+
+  await logService.addLogToDatabase({
+    username: userId,
+    action: 'releases/update-addReleasesToDatabase',
+    message: `Updated database with ${
+      allNewReleases.length !== 0 ? allNewReleases.length : '0'
+    } releases`,
+  })
 
   return allNewReleases
 }

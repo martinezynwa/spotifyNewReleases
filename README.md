@@ -20,6 +20,37 @@ How:
 
 ### PROGRESS
 
+
+### 0.15
+
+- [x] remove Artists page and merge it with groups page
+   - [x] context update etc.
+- [x] load specific artists per group only, not all
+- [x] sync/removal of artists --> to Options page
+- [x] pick random color(ignore already picked) for groups page during creation
+- [x] Unnamed group that will show unassigned artists
+
+- [x] Tailwind CSS for both desktop and mobile
+  - [x] Dashboard
+  - [x] Releases
+  - [x] Single release
+  - [x] Groups
+    - [x] group creation
+    - [x] group deletion
+    - [x] sidebar for artists
+      - [x] delete from group
+      - [x] edit group
+      - [x] hide sidebar
+  - [x] Single group
+  - [x] Options
+  - [x] Login page
+  - [x] Notifications
+### TBD
+- [ ] figure out unnecessary re-renders
+- [ ] some records are released during the day and not at midnight, add function to check the previous day as well
+
+
+
 # AUTH & USER
 ### 0.10
 - [x] register app on Spotify dev dashboard
@@ -36,7 +67,7 @@ How:
 ### 0.14
 - [x] save refresh token into database
 ### TBD
-- [ ] check why is token not refreshed automatically sometimes
+- [x] check why is token not refreshed automatically sometimes
 
 # DASHBOARD
 ### 0.10
@@ -54,8 +85,7 @@ How:
 - [x] return what songs were added during the run from backend
 ### 0.13
 - [x] list of what was added is shown on main page without having to run the action
-### TBD
-- [ ]
+
 
 # GROUPS PAGE
 ### 0.11
@@ -77,8 +107,7 @@ How:
 - [x] deleting group automatically removes artist from it as well
 ### 0.13
 - [x] show playlists that are owned by logged user only
-### TBD
-- [ ]
+
 
 # ARTISTS PAGE
 ### 0.11
@@ -98,8 +127,6 @@ How:
 - [x] logic for removing records from database if artist is unfollowed
 ### 0.14
 - [x] infinite scrolling
-### TBD
-- [ ]
 
 # RELEASES PAGE
 ### 0.11
@@ -117,12 +144,6 @@ How:
 - [x] implement manual refresh as well
 ### 0.14
 - [x] infinite scrolling
-### TBD
-
-
-# SEARCH PAGE
-### TBD
-- [ ] search form getting specific artist's releases in last 30 days
 
 
 # OTHERS
@@ -151,4 +172,3 @@ How:
 - [x] schedule tasks to run automatically every night
 - [x] logging of errors
 - [x] logging of jobs
-### TBD

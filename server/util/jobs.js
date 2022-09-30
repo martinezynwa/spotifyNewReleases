@@ -3,15 +3,22 @@ const require = createRequire(import.meta.url)
 
 import axios from 'axios'
 import logService from '../util/logger.js'
+
 const cron = require('node-cron')
 const User = require('../models/User.cjs')
 
-const runJobs = async () => {
-  const user = await User.find({ spotify_id: process.env.SPOTIFY_ID })
-  const scheduleDate = user[0].customSchedule
-
-  cron.schedule(scheduleDate, async () => {
+const initJobs = async () => {
+  const runEveryDay = cron.schedule('56 00 08 * * *', async () => {
+    console.log('Started')
     let accessToken = ''
+
+    await logService.addLogToDatabase({
+      username: process.env.SPOTIFY_ID,
+      action: 'job started',
+      message: 'Schedule triggered',
+    })
+
+    const user = await User.find({ spotify_id: process.env.SPOTIFY_ID })
 
     //step 1 - getting new access token from refresh token
     await axios({
@@ -30,11 +37,6 @@ const runJobs = async () => {
     })
       .then(async res => {
         accessToken = res.data.access_token
-        await logService.addLogToDatabase({
-          username: process.env.SPOTIFY_ID,
-          action: 'jobs-refresh_token',
-          message: 'success',
-        })
       })
       .catch(async err => {
         await logService.addLogToDatabase({
@@ -55,15 +57,6 @@ const runJobs = async () => {
           userId: process.env.SPOTIFY_ID,
         },
       })
-      .then(async res => {
-        await logService.addLogToDatabase({
-          username: process.env.SPOTIFY_ID,
-          action: 'jobs-spotify/sync',
-          message: `Synced ${
-            res.data.length !== 0 ? res.data.length : '0'
-          } new artists`,
-        })
-      })
       .catch(async err => {
         await logService.addLogToDatabase({
           username: process.env.SPOTIFY_ID,
@@ -82,15 +75,6 @@ const runJobs = async () => {
           accessToken,
           userId: process.env.SPOTIFY_ID,
         },
-      })
-      .then(async res => {
-        await logService.addLogToDatabase({
-          username: process.env.SPOTIFY_ID,
-          action: 'jobs-spotify/remove',
-          message: `Unfollowed ${
-            res.data.length !== 0 ? res.data.length : '0'
-          } artists`,
-        })
       })
       .catch(async err => {
         await logService.addLogToDatabase({
@@ -111,15 +95,6 @@ const runJobs = async () => {
           userId: process.env.SPOTIFY_ID,
         },
       })
-      .then(async res => {
-        await logService.addLogToDatabase({
-          username: process.env.SPOTIFY_ID,
-          action: 'jobs-releases/all',
-          message: `Added ${
-            res.data.length !== 0 ? res.data.length : '0'
-          } new albums/singles`,
-        })
-      })
       .catch(async err => {
         await logService.addLogToDatabase({
           username: process.env.SPOTIFY_ID,
@@ -137,16 +112,8 @@ const runJobs = async () => {
         params: {
           accessToken,
           userId: process.env.SPOTIFY_ID,
+          job: true,
         },
-      })
-      .then(async res => {
-        await logService.addLogToDatabase({
-          username: process.env.SPOTIFY_ID,
-          action: 'jobs-releases/update',
-          message: `Updated releases with ${
-            res.data.length !== 0 ? res.data.length : '0'
-          } records`,
-        })
       })
       .catch(async err => {
         await logService.addLogToDatabase({
@@ -159,8 +126,7 @@ const runJobs = async () => {
         })
       })
   })
+  runEveryDay.start()
 }
 
-export default {
-  runJobs,
-}
+export default initJobs

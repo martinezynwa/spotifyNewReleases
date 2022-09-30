@@ -11,9 +11,9 @@ router.get('/', async (request, response) => {
   const { createdBy, skip } = request.query
   const artists = await Artist.find({ createdBy })
     .collation({ locale: 'en' })
-    .sort({ connectedGroupName: 1 })
+    //.sort({ connectedGroupName: 1 })
     .skip(skip ? skip : 0)
-    .limit(20)
+    .limit(40)
 
   //returning sorted artists
   response.json(artists)
@@ -22,20 +22,19 @@ router.get('/', async (request, response) => {
 //get artists filtered by group
 router.get('/group/:id', async (request, response) => {
   const connectedGroupId = request.params.id
-  const artists = await Artist.find({ connectedGroupId })
+  const { createdBy } = request.query
 
-  //returning filtered artists
-  response.json(artists)
+  connectedGroupId === 'undefined'
+    ? response.json(await Artist.find({ createdBy, connectedGroupId: null }))
+    : response.json(await Artist.find({ connectedGroupId }))
 })
 
-//change artist's group
+//manipulate with artist's group
 router.put('/group', async (request, response) => {
-  const { _id, connectedGroup } = request.body
-  const connectedGroupId = connectedGroup.split(',')[0]
-  const connectedGroupName = connectedGroup.split(',')[1]
+  const { type, newGroup, _id } = request.body
 
-  //when removing artist from group
-  if (connectedGroup === 'Not added') {
+  //removing artist from group
+  if (type === 'remove') {
     await Artist.findOneAndUpdate(
       { _id },
       {
@@ -49,19 +48,21 @@ router.put('/group', async (request, response) => {
     return response.json('Removed')
   }
 
-  //changing artist's group
+  const { groupId, groupName } = newGroup
+
+  //adding to group or changing artist's group
   await Artist.findOneAndUpdate(
     { _id },
     {
       $set: {
-        connectedGroupId: connectedGroupId,
-        connectedGroupName: connectedGroupName,
+        connectedGroupId: groupId,
+        connectedGroupName: groupName,
       },
     },
   )
 
   //returning changed group
-  response.json(connectedGroup.split(',')[1])
+  response.json(newGroup.groupName)
 })
 
 export default router

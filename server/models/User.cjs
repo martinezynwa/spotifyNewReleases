@@ -10,14 +10,17 @@ const schema = new mongoose.Schema({
   registeredAt: {
     type: String,
   },
-  lastFetchDate: {
-    type: String,
-  },
   refreshToken: {
     type: String,
   },
-  customSchedule: {
+  lastFetchDate: {
     type: String,
+  },
+  lastFetchNewArtistsSync: {
+    type: Boolean,
+  },
+  lastFetchNewAlbumsAdded: {
+    type: Boolean,
   },
 })
 

@@ -17,13 +17,15 @@ const getArtistsFromDatabase = async (createdBy, skip) => {
 }
 
 //get artists filtered by group
-const getArtistsFromGroups = async id => {
-  const { data } = await axios.get(`${httpLink}/group/${id}`)
+const getArtistsFromGroups = async (id, createdBy) => {
+  const { data } = await axios.get(`${httpLink}/group/${id}`, {
+    params: { createdBy },
+  })
   return data
 }
 
 //assign artist to a group
-const addArtistToGroup = async content => {
+const manipulateArtistGroup = async content => {
   const { data } = await axios.put(`${httpLink}/group`, content)
   return data
 }
@@ -31,5 +33,5 @@ const addArtistToGroup = async content => {
 export default {
   getArtistsFromDatabase,
   getArtistsFromGroups,
-  addArtistToGroup,
+  manipulateArtistGroup,
 }

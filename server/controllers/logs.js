@@ -9,7 +9,7 @@ const Log = require('../models/Log.cjs')
 //get logs from database
 router.get('/', async (request, response) => {
   const { userId } = request.query
-  const logs = await Log.find({ username: userId })
+  const logs = await Log.find({ username: userId }).sort({ timestamp: -1 })
 
   response.json(logs)
 })

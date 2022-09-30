@@ -1,3 +1,6 @@
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
@@ -7,7 +10,7 @@ import artistRouter from './controllers/artists.js'
 import releasesRouter from './controllers/releases.js'
 import spotifyRouter from './controllers/spotify.js'
 import logRouter from './controllers/logs.js'
-import jobs from './util/jobs.js'
+import initJobs from './util/jobs.js'
 
 const app = express()
 
@@ -33,5 +36,5 @@ mongoose
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on PORT ${process.env.PORT}`)
-  jobs.runJobs()
+  initJobs()
 })

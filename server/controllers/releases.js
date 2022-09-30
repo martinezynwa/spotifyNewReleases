@@ -3,15 +3,15 @@ const require = createRequire(import.meta.url)
 
 import axios from 'axios'
 import express from 'express'
-import dayjs from 'dayjs'
+const router = express.Router()
+
 import dataService from '../util/songsAndAlbums.js'
-import { day30DaysAgo } from '../util/day30DaysAgo.js'
-import jobs from '../util/jobs.js'
+import logService from '../util/logger.js'
+import userInfoService from '../util/userInfoManipulation.js'
+import { day60DaysAgo } from '../util/day60DaysAgo.js'
 
 const Release = require('../models/Release.cjs')
 const User = require('../models/User.cjs')
-
-const router = express.Router()
 
 axios.defaults.baseURL = 'https://api.spotify.com/v1'
 axios.defaults.headers['Content-Type'] = 'application/json'
@@ -31,30 +31,44 @@ router.get('/all', async (request, response) => {
     return response.status(albums.status).json(albums.message)
   }
 
-  //get songs from previously loaded albums
-  const songs = await dataService.getSongsOfAlbums(albums, userId)
-  if (songs?.error) {
-    return response.status(songs.status).json(songs.message)
+  //log addition
+  await logService.addLogToDatabase({
+    username: process.env.SPOTIFY_ID,
+    action: 'releases/all-albums',
+    message: `Added ${albums.length !== 0 ? albums.length : '0'} new albums`,
+  })
+
+  //if no new albums, it's pointless to get songs
+  if (albums.length > 0) {
+    //get songs from previously loaded albums
+    const songs = await dataService.getSongsOfAlbums(albums, userId)
+    if (songs?.error) {
+      return response.status(songs.status).json(songs.message)
+    }
+
+    //assign songs to respective playlists
+    const assigned = await dataService.assignSongsToPlaylists(songs, userId)
+    if (assigned?.error) {
+      return response.status(assigned.status).json(assigned.message)
+    }
+
+    //log addition
+    await logService.addLogToDatabase({
+      username: process.env.SPOTIFY_ID,
+      action: 'releases/all-songs',
+      message: `Added ${songs.length !== 0 ? songs.length : '0'} new songs`,
+    })
   }
 
-  //assign songs to respective playlists
-  const assigned = await dataService.assignSongsToPlaylists(songs, userId)
-  if (assigned?.error) {
-    return response.status(assigned.status).json(assigned.message)
-  }
+  await userInfoService.updateFetchValues(
+    'lastFetchNewAlbumsAdded',
+    albums.length > 0 ? true : false,
+    userId,
+  )
 
   //update last fetch date in user's profile
-  const updatedFetchDate = dayjs(new Date()).format('YYYY-MM-DD')
+  await userInfoService.updateFetchDate(userId)
 
-  await User.findOneAndUpdate(
-    { spotify_id: userId },
-    {
-      $set: {
-        lastFetchDate: updatedFetchDate,
-      },
-    },
-  )
-  //return what was added
   response.json(albums.sort((a, b) => a.artistName.localeCompare(b.artistName)))
 })
 
@@ -73,41 +87,47 @@ router.get('/songs', async (request, response) => {
 
 //update database with new releases
 router.get('/update', async (request, response) => {
-  const { accessToken, userId } = request.query
+  const { accessToken, userId, job } = request.query
+  const user = await User.findOne({ spotify_id: userId })
+
   axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
 
+  if (job && !user.lastFetchNewArtistsSync && !user.lastFetchNewAlbumsAdded) {
+    await logService.addLogToDatabase({
+      username: process.env.SPOTIFY_ID,
+      action: 'releases/update',
+      message: 'No new releases added',
+    })
+    return
+  }
+
+  //add new releases to database
   const releases = await dataService.addReleasesToDatabase(userId)
   if (releases.error) {
     return response.status(releases.status).json(releases.message)
   }
-  await Release.deleteMany({ releaseDate: { $lt: day30DaysAgo } })
+
+  //remove releases older than 60 days from database
+  await Release.deleteMany({ releaseDate: { $lt: day60DaysAgo } })
   response.json(releases)
 })
 
-//get new releases from last 30 days saved in database
+//get new releases from last 60 days saved in database
 router.get('/database', async (request, response) => {
   const { userId, skip } = request.query
-
   const releases = await Release.find({ createdBy: userId })
     .sort({ releaseDate: -1 })
     .skip(skip ? skip : 0)
-    .limit(30)
+    .limit(20)
   response.json(releases)
 })
 
-//change scheduler
+//change scheduler date
 router.put('/scheduler', async (request, response) => {
   const { userId, schedule } = request.body.params
 
-  await User.findOneAndUpdate(
-    { spotify_id: userId },
-    {
-      $set: {
-        customSchedule: schedule,
-      },
-    },
-  )
-  jobs.runJobs()
+  await userInfoService.updateCustomSchedule(schedule, userId)
+
   response.json('set')
 })
 

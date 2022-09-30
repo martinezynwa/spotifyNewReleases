@@ -25,7 +25,7 @@ export const NotificationProvider = ({ children }) => {
       () => {
         setMessage('')
       },
-      inputMessage.style === 'success' ? 3500 : 10000,
+      inputMessage.style === 'success' ? 2500 : 10000,
     )
   }
 

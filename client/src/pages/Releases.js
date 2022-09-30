@@ -4,9 +4,11 @@ import { ReleaseProvider } from '../context/ReleaseContext.js'
 const Releases = () => {
   return (
     <>
-      <ReleaseProvider>
-        <ReleasesList />
-      </ReleaseProvider>
+      <div className="mx-2 md:mx-4 mt-8 pb-10">
+        <ReleaseProvider>
+          <ReleasesList />
+        </ReleaseProvider>
+      </div>
     </>
   )
 }

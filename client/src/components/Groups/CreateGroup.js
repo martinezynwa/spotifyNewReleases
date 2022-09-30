@@ -27,20 +27,11 @@ const CreateGroup = () => {
   return (
     <>
       <div>
-        <h3>Create Group</h3>
         <form onSubmit={submitGroup}>
           <div>
-            <label>Group name</label>
-            <input
-              type="text"
-              name="groupName"
-              value={itemInput.groupName}
-              onChange={onChange}
-            />
-          </div>
-          <div className="form-option">
-            <label>Connected playlist</label>
             <select
+              className="bg-active py-2 mb-2 text-gray-400 rounded w-[18rem]"
+              placeholder="Select playlist"
               type="text"
               name="connectedPlaylist"
               onChange={onChange}
@@ -48,7 +39,17 @@ const CreateGroup = () => {
               <UserPlaylists />
             </select>
           </div>
-          <button>Create</button>
+          <div className="">
+            <input
+              className="bg-active pl-1 py-2 mb-3 text-gray-300 rounded w-[18rem]"
+              placeholder="Enter group name"
+              type="text"
+              name="groupName"
+              value={itemInput.groupName}
+              onChange={onChange}
+            />
+          </div>
+          <button className='p-2 w-20 h-11 bg-active font-semibold rounded-2xl hover:bg-active'>Create</button>
         </form>
       </div>
     </>

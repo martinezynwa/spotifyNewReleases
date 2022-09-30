@@ -5,8 +5,8 @@ const AlbumsAdded = ({ albums }) => {
   return (
     <>
       <h3>{returnText}</h3>
-      {albums.map((a, i) => (
-        <div key={i}>
+      {albums.map(a => (
+        <div key={(a.artistName, a.albumName)}>
           {a.artistName} │ {a.albumName} │
         </div>
       ))}

@@ -1,20 +1,16 @@
-/*@tailwind base;
+@tailwind base;
 @tailwind utilities;
 @tailwind components;
 
 @layer base {
+
   html,
   body,
   #root {
-    @apply h-full bg-backdrop text-white;
+    @apply h-full bg-backdrop text-white antialiased;
   }
 
   #root {
     @apply flex flex-col;
   }
-
-  .wrapper {
-    @apply flex h-full
-  }
 }
-*/

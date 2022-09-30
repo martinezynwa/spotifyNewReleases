@@ -19,6 +19,9 @@ const schema = new mongoose.Schema({
   createdAt: {
     type: String,
   },
+  artistImage: {
+    type: String,
+  },
 })
 
 module.exports = mongoose.model('Artist', schema)

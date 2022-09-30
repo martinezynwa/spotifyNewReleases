@@ -7,6 +7,7 @@ import dayjs from 'dayjs'
 import Release from '../models/Release.cjs'
 import dataService from '../util/songsAndAlbums.js'
 import logService from '../util/logger.js'
+import userInfoService from '../util/userInfoManipulation.js'
 
 const Artist = require('../models/Artist.cjs')
 const router = express.Router()
@@ -37,7 +38,6 @@ router.get('/sync', async (request, response) => {
           createdBy: userId,
           artistSpotifyId: i.id,
         }).count()
-
         //if not, new document is created in database
         if (artistInDatabase === 0) {
           const newArtist = new Artist({
@@ -45,6 +45,7 @@ router.get('/sync', async (request, response) => {
             artistSpotifyId: i.id,
             connectedGroupId: null,
             connectedGroupName: null,
+            artistImage: i.images[1].url,
             createdBy: userId,
             createdAt: dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss'),
           })
@@ -63,6 +64,22 @@ router.get('/sync', async (request, response) => {
       return response.status(res.status).json(res.message)
     }
   }
+
+  //log addition
+  await logService.addLogToDatabase({
+    username: process.env.SPOTIFY_ID,
+    action: 'spotify/sync',
+    message: `Synced ${
+      artistsArray.length !== 0 ? artistsArray.length : '0'
+    } new artists`,
+  })
+
+  await userInfoService.updateFetchValues(
+    'lastFetchNewArtistsSync',
+    artistsArray.length > 0 ? true : false,
+    userId,
+  )
+
   //returning only newly followed artists back to client
   response.json(
     artistsArray.sort((a, b) => a.artistName.localeCompare(b.artistName)),
@@ -143,8 +160,19 @@ router.get('/remove', async (request, response) => {
       )
     }
     //returns what was removed
+    await logService.addLogToDatabase({
+      username: process.env.SPOTIFY_ID,
+      action: 'spotify/remove',
+      message: `Unfollowed ${artistsFromDatabase.length} artists`,
+    })
     return response.json(artistsFromDatabase)
   }
+
+  await logService.addLogToDatabase({
+    username: process.env.SPOTIFY_ID,
+    action: 'spotify/remove',
+    message: `Unfollowed 0 artists`,
+  })
 
   return response.json()
 })
