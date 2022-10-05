@@ -67,7 +67,7 @@ router.get('/sync', async (request, response) => {
 
   //log addition
   await logService.addLogToDatabase({
-    username: process.env.SPOTIFY_ID,
+    username: userId,
     action: 'spotify/sync',
     message: `Synced ${
       artistsArray.length !== 0 ? artistsArray.length : '0'
@@ -161,7 +161,7 @@ router.get('/remove', async (request, response) => {
     }
     //returns what was removed
     await logService.addLogToDatabase({
-      username: process.env.SPOTIFY_ID,
+      username: userId,
       action: 'spotify/remove',
       message: `Unfollowed ${artistsFromDatabase.length} artists`,
     })
@@ -169,7 +169,7 @@ router.get('/remove', async (request, response) => {
   }
 
   await logService.addLogToDatabase({
-    username: process.env.SPOTIFY_ID,
+    username: userId,
     action: 'spotify/remove',
     message: `Unfollowed 0 artists`,
   })

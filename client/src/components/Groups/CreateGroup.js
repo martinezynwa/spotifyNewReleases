@@ -1,9 +1,13 @@
 import { useState } from 'react'
 import UserPlaylists from './UserPlaylists'
 import useGroup from '../../context/GroupContext'
+import useNotification from '../../context/NotificationContext'
+import useUser from '../../context/UserContext'
 
 const CreateGroup = () => {
   const { addGroup } = useGroup()
+  const { setNotification } = useNotification()
+  const { user } = useUser()
   const initialState = {
     groupName: '',
     connectedPlaylist: '',
@@ -20,6 +24,22 @@ const CreateGroup = () => {
 
   const submitGroup = event => {
     event.preventDefault()
+    if (user.userId === process.env.REACT_APP_TEST_USER_ID) {
+      setNotification({
+        message: 'Demo only, group would have been created',
+        style: 'success',
+      })
+      setItemInput(initialState)
+      return
+    }
+
+    if (!itemInput.groupName || !itemInput.connectedPlaylist) {
+      setNotification({
+        message: 'All forms should be filled in',
+        style: 'error',
+      })
+      return
+    }
     addGroup(itemInput)
     setItemInput(initialState)
   }
@@ -49,7 +69,9 @@ const CreateGroup = () => {
               onChange={onChange}
             />
           </div>
-          <button className='p-2 w-20 h-11 bg-active font-semibold rounded-2xl hover:bg-active'>Create</button>
+          <button className="p-2 w-20 h-11 bg-active font-semibold rounded-2xl hover:bg-active">
+            Create
+          </button>
         </form>
       </div>
     </>

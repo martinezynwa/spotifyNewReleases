@@ -2,14 +2,23 @@ import { useState } from 'react'
 import userService from '../../services/user'
 import logService from '../../services/logs'
 import useNotification from '../../context/NotificationContext'
+import useUser from '../../context/UserContext'
 
 const Logs = () => {
   const [logs, setLogs] = useState([])
   const { setNotification } = useNotification()
+  const { user } = useUser()
 
   const showLogs = async () => {
+    if (user.userId === process.env.REACT_APP_TEST_USER_ID) {
+      setNotification({
+        message: 'No logs available',
+        style: 'error',
+      })
+      return
+    }
+    
     const { id: userId } = await userService.getLoggedUser()
-
     await logService
       .getLogs(userId)
       .then(res => {

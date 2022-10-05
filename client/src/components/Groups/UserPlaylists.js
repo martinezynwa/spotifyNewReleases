@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import userService from '../../services/user.js'
+import useUser from '../../context/UserContext'
 
 const UserPlaylists = () => {
+  const { user } = useUser()
   const [usersPlaylists, setUsersPlaylists] = useState([])
 
   useEffect(() => {
@@ -16,7 +18,7 @@ const UserPlaylists = () => {
         })
     }
     getData()
-  }, [])
+  }, [user])
 
   return (
     <>

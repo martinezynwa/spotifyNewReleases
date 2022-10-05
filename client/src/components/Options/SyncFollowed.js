@@ -44,7 +44,15 @@ const Sync = () => {
         {!loading ? (
           <button
             className="bg-active hover:bg-btnhover p-2 w-30 h-15 rounded-lg cursor-pointer"
-            onClick={() => syncFollowedArtists()}>
+            onClick={() => {
+              user.userId !== process.env.REACT_APP_TEST_USER_ID
+                ? syncFollowedArtists()
+                : setNotification({
+                    message: 'Newly followed artists would have been added',
+                    style: 'success',
+                  })
+              return
+            }}>
             Proceed
           </button>
         ) : (

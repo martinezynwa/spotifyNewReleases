@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import UpdateButton from './UpdateButton.js'
 import SingleRelease from './SingleRelease.js'
 import useRelease from '../../context/ReleaseContext'

@@ -34,7 +34,7 @@ const AddedReleases = () => {
           ))}
         </div>
       ) : (
-        <h3 className="mb-10 text-xl text-white  tracking-tight">
+        <h3 className="ml-2 md:ml-0 mb-10 text-xl text-white tracking-tight">
           No new releases today
         </h3>
       )}

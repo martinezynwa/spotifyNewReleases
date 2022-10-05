@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { accessToken } from '../util/spotifyAuth.js'
 import { logout } from '../util/spotifyAuth.js'

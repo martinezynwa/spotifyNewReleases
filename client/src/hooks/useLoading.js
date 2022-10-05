@@ -8,7 +8,7 @@ const useLoading = () => {
   const LoadingProgress = () => {
     if (!loading) return null
     return (
-      <div className="flex flex-row gap-2 ml-3 mb-4 font-semibold text-lg">
+      <div className="flex flex-row items-center gap-2 ml-3 mb-4 font-semibold text-base md:text-lg">
         <Spinner />
         {loadingText}
       </div>

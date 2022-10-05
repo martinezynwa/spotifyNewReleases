@@ -8,6 +8,7 @@ const router = express.Router()
 import dataService from '../util/songsAndAlbums.js'
 import logService from '../util/logger.js'
 import userInfoService from '../util/userInfoManipulation.js'
+import demoService from '../util/demoUtil.js'
 import { day60DaysAgo } from '../util/day60DaysAgo.js'
 
 const Release = require('../models/Release.cjs')
@@ -33,7 +34,7 @@ router.get('/all', async (request, response) => {
 
   //log addition
   await logService.addLogToDatabase({
-    username: process.env.SPOTIFY_ID,
+    username: userId,
     action: 'releases/all-albums',
     message: `Added ${albums.length !== 0 ? albums.length : '0'} new albums`,
   })
@@ -54,7 +55,7 @@ router.get('/all', async (request, response) => {
 
     //log addition
     await logService.addLogToDatabase({
-      username: process.env.SPOTIFY_ID,
+      username: userId,
       action: 'releases/all-songs',
       message: `Added ${songs.length !== 0 ? songs.length : '0'} new songs`,
     })
@@ -74,7 +75,12 @@ router.get('/all', async (request, response) => {
 
 //get newly released songs
 router.get('/songs', async (request, response) => {
-  const { accessToken, album_id } = request.query
+  let { accessToken, album_id } = request.query
+
+  if (accessToken === 'test') {
+    accessToken = await demoService.demoGetToken()
+  }
+
   axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
 
   const songs = await dataService.getSongs(album_id)
@@ -87,19 +93,9 @@ router.get('/songs', async (request, response) => {
 
 //update database with new releases
 router.get('/update', async (request, response) => {
-  const { accessToken, userId, job } = request.query
-  const user = await User.findOne({ spotify_id: userId })
+  const { accessToken, userId } = request.query
 
   axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
-
-  if (job && !user.lastFetchNewArtistsSync && !user.lastFetchNewAlbumsAdded) {
-    await logService.addLogToDatabase({
-      username: process.env.SPOTIFY_ID,
-      action: 'releases/update',
-      message: 'No new releases added',
-    })
-    return
-  }
 
   //add new releases to database
   const releases = await dataService.addReleasesToDatabase(userId)

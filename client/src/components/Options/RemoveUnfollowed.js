@@ -44,7 +44,16 @@ const RemoveUnfollowed = () => {
         {!loading ? (
           <button
             className="bg-active hover:bg-btnhover p-2 w-30 h-15 rounded-lg cursor-pointer"
-            onClick={() => removeUnfollowed()}>
+            onClick={() => {
+              user.userId !== process.env.REACT_APP_TEST_USER_ID
+                ? removeUnfollowed()
+                : setNotification({
+                    message:
+                      'Unfollowed artists on Spotify would have been removed',
+                    style: 'success',
+                  })
+              return
+            }}>
             Proceed
           </button>
         ) : (

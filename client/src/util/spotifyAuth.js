@@ -39,7 +39,6 @@ const hasTokenExpired = () => {
  */
 
 const refreshToken = async () => {
-  console.log('??')
   // Logout if there's no refresh token stored or we've managed to get into a reload infinite loop
   if (
     !LOCALSTORAGE_VALUES.refreshToken ||
@@ -49,6 +48,7 @@ const refreshToken = async () => {
     console.error('No refresh token available')
     logout()
   }
+
   const { data } = await axios
     .get(`${process.env.REACT_APP_BASE_URL}/refresh_token`, {
       params: {
@@ -56,12 +56,10 @@ const refreshToken = async () => {
       },
     })
     .catch(err => {
-      console.log(err)
+      console.err(err)
     })
-
   // Update localStorage values
   window.localStorage.setItem(LOCALSTORAGE_KEYS.accessToken, data.access_token)
-
   window.localStorage.setItem(LOCALSTORAGE_KEYS.timestamp, Date.now())
 
   // Reload the page for localStorage updates to be reflected
@@ -88,6 +86,7 @@ export const logout = () => {
  */
 const getAccessToken = () => {
   const queryString = window.location.search
+
   if (queryString.substring(0, 13) === '?access_token') {
     window.history.pushState({}, null, '/')
   }
@@ -99,7 +98,6 @@ const getAccessToken = () => {
     [LOCALSTORAGE_KEYS.expireTime]: urlParams.get('expires_in'),
   }
   const hasError = urlParams.get('error')
-
   // If there's an error OR the token in localStorage has expired, refresh the token
 
   if (

@@ -27,7 +27,6 @@ const GroupPage = () => {
     '#BA5D07': 'from-[#BA5D07]',
     '#0D73EC': 'from-[#0D73EC]',
   }
-
   return (
     <>
       <div>
@@ -37,10 +36,14 @@ const GroupPage = () => {
             {group.groupName ? group.groupName : 'Unassigned'}
           </h2>
           <h2 className="text-xs font-semibold uppercase ml-1">
-            {artists ? artists.length : null} artists without group
+            {group === 'unassigned'
+              ? `${artists?.length} artist${
+                  artists?.length === 1 ? '' : 's'
+                } without group`
+              : `${artists?.length} artist${artists?.length === 1 ? '' : 's'}`}
           </h2>
           <h2 className={`${group.groupName ? '' : 'hidden '}text-[12px] ml-1`}>
-            Spotify playlist{' '}
+            Spotify playlist:{' '}
             <span className="font-semibold">{group.connectedPlaylistName}</span>
           </h2>
           {group !== 'unassigned' ? <RemoveGroup id={group._id} /> : null}

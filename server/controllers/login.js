@@ -10,13 +10,21 @@ import { loginUrl } from '../util/loginUrl.js'
 const User = require('../models/User.cjs')
 const router = express.Router()
 
+router.get('/test', async (request, response) => {
+  const queryParams = new URLSearchParams({
+    access_token: 'test',
+    refresh_token: 'test',
+    expires_in: '3600',
+  })
+  response.redirect(`${process.env.CLIENT_URI}/?${queryParams}`)
+})
+
 router.get('/login', async (request, response) => {
   response.redirect(loginUrl)
 })
 
 router.get('/callback', async (request, response) => {
   const code = request.query.code || null
-
   //logging-in & obtaining tokens
   let res = await axios({
     method: 'post',
@@ -126,6 +134,12 @@ router.get('/callback', async (request, response) => {
 
 router.get('/refresh_token', async (request, response) => {
   const { refresh_token } = request.query
+  if (refresh_token === 'test') {
+    response.send({
+      access_token: 'test',
+    })
+    return
+  }
 
   const res = await axios({
     method: 'post',

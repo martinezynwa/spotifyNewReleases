@@ -10,7 +10,7 @@ const Notification = () => {
         }{${
           message.style === 'success' ? ' bg-green-500 ' : ' bg-red-500 '
         } md:rounded-lg font-semibold`}>
-        <h2 className='md:text-base md:font-medium text-xl font-bold my-8 md:-my-3'>{message.message}</h2>
+        <h2 className='md:text-base md:font-medium text-md font-bold mt-8 md:-my-3'>{message.message}</h2>
       </div>
     </>
   )

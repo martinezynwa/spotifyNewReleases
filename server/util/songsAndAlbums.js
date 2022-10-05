@@ -131,6 +131,7 @@ const getAlbums = async (lastFetchDate, userId) => {
     }
   }
 
+  //delay function so the Spotify Web API Rate limit is not triggered
   const delay = () => {
     return new Promise((resolve, reject) => setTimeout(resolve, 1000))
   }
@@ -299,6 +300,7 @@ const addReleasesToDatabase = async userId => {
     for (let groupType of ['album', 'single']) {
       counter = counter + 1
       totalCounter = totalCounter + 1
+
       const response = await axios
         .get(
           `/artists/${artist.artistSpotifyId}/albums?include_groups=${groupType}&limit=5`,
@@ -340,6 +342,7 @@ const addReleasesToDatabase = async userId => {
       filteredReleases.push(...items)
     }
 
+    //filter duplicates from current batch
     filteredReleases = filteredReleases.filter(
       (record, index, array) =>
         array.findIndex(record2 => record2.name === record.name) === index,
@@ -394,9 +397,15 @@ const addReleasesToDatabase = async userId => {
     )
   }
 
+  //delay function so the Spotify Web API Rate limit is not triggered
+  const delay = () => {
+    return new Promise((resolve, reject) => setTimeout(resolve, 250))
+  }
+
   for (let artist of artists) {
-    const response = await filterReleases(artist)
-    if (response?.error) return response
+    const res = await filterReleases(artist)
+    await delay()
+    if (res?.error) return res
   }
 
   await logService.addLogToDatabase({

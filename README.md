@@ -45,8 +45,13 @@ How:
   - [x] Options
   - [x] Login page
   - [x] Notifications
+
+### 0.16
+- [x] create demo version
+  - [x] regular jobs for demo account
+- [x] deletion confirmation(double click)
+
 ### TBD
-- [ ] create test version
 - [ ] go back button
 - [ ] figure out unnecessary re-renders
 - [ ] when returning from release that is placed low, it should return to the same place, not to the top
