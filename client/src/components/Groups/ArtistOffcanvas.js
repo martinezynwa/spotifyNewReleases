@@ -19,7 +19,6 @@ const ArtistOffcanvas = () => {
   })
 
   const manipulateGroup = async (type, newGroup) => {
-    
     await addArtistToGroup({ type, newGroup, _id: artistDetails.artistId })
     toggleOffcanvas(!offcanvas)
   }
@@ -33,13 +32,18 @@ const ArtistOffcanvas = () => {
         text: 'Remove?',
       })
     } else {
-      user.userId !== process.env.REACT_APP_TEST_USER_ID
-        ? manipulateGroup('remove')
-        : setButtonText({
-            ...buttonText,
-            clicked: buttonText.clicked + 1,
-            text: 'Removed(demo)',
-          })
+      if (user.userId !== process.env.REACT_APP_TEST_USER_ID) {
+        manipulateGroup('remove')
+      } else {
+        setButtonText({
+          ...buttonText,
+          clicked: buttonText.clicked + 1,
+          text: 'Removed(demo)',
+        })
+        setTimeout(() => {
+          toggleOffcanvas(!offcanvas)
+        }, 2000)
+      }
     }
   }
 

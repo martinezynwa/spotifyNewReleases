@@ -8,7 +8,6 @@ import Groups from './pages/Groups'
 import Group from './pages/Group'
 import Releases from './pages/Releases'
 import Release from './pages/Release'
-import Search from './pages/Search'
 import Options from './pages/Options'
 import { NotificationProvider } from './context/NotificationContext.js'
 import { UserProvider } from './context/UserContext.js'
@@ -35,7 +34,6 @@ const App = () => {
                     <Route path="/groups/:id" element={<Group />} />
                     <Route path="/releases" element={<Releases />} />
                     <Route path="/releases/:id" element={<Release />} />
-                    <Route path="/search" element={<Search />} />
                     <Route path="/options" element={<Options />} />
                   </Route>
                   <Route path="/" element={<PublicRoute />}>

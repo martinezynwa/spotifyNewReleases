@@ -35,6 +35,17 @@ const RemoveUnfollowed = () => {
       })
   }
 
+  const performDemoFunction = () => {
+    triggerLoading(true)
+    setTimeout(() => {
+      triggerLoading(false)
+      setNotification({
+        message: 'Newly followed artists would have been added',
+        style: 'success',
+      })
+    }, 3000)
+  }
+
   return (
     <>
       <div className="flex flex-row justify-between mt-5 items-center gap-8">
@@ -47,11 +58,7 @@ const RemoveUnfollowed = () => {
             onClick={() => {
               user.userId !== process.env.REACT_APP_TEST_USER_ID
                 ? removeUnfollowed()
-                : setNotification({
-                    message:
-                      'Unfollowed artists on Spotify would have been removed',
-                    style: 'success',
-                  })
+                : performDemoFunction()
               return
             }}>
             Proceed
