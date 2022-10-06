@@ -7,7 +7,7 @@ const User = require('../models/User.cjs')
 //update last fetch date
 const updateFetchDate = async userId => {
   const today = dayjs(new Date()).format('YYYY-MM-DD')
-  await User.findOneAndUpdate(
+  return await User.findOneAndUpdate(
     { spotify_id: userId },
     {
       $set: {
@@ -15,8 +15,6 @@ const updateFetchDate = async userId => {
       },
     },
   )
-
-  return
 }
 
 /*update if new artists were followed during run
@@ -25,7 +23,7 @@ const updateFetchDate = async userId => {
   were added and specific job does not have to run for no reason
 */
 const updateFetchValues = async (type, updateValue, userId) => {
-  await User.findOneAndUpdate(
+  return await User.findOneAndUpdate(
     { spotify_id: userId },
     {
       $set: {
@@ -33,7 +31,6 @@ const updateFetchValues = async (type, updateValue, userId) => {
       },
     },
   )
-  return
 }
 
 export default {

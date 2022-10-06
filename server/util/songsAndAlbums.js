@@ -72,22 +72,15 @@ const getAlbums = async (lastFetchDate, userId) => {
           items = res.data.items
         })
         .catch(async err => {
+          console.log('testXYZ', err.response)
           await logService.addLogToDatabase({
             username: userId,
             action: 'filterReleases',
-            message: err.response,
-            status: '',
-            baseUrl: '',
-            url: '',
-          })
-          /*          await logService.addLogToDatabase({
-            username: userId,
-            action: 'filterReleases',
-            message: err.response.data.error.message,
-            status: err.response.data.error.status,
+            message: err.data.error.message, // err.response.data.error.message,
+            status: err.data.error.status, //err.response.data.error.status,
             baseUrl: err.config.baseURL,
             url: err.config.url,
-          })*/
+          })
           return {
             error: true,
             status: err.response.data.error?.status || err.response.status,
@@ -133,7 +126,7 @@ const getAlbums = async (lastFetchDate, userId) => {
 
   //delay function so the Spotify Web API Rate limit is not triggered
   const delay = () => {
-    return new Promise((resolve, reject) => setTimeout(resolve, 1000))
+    return new Promise((resolve, reject) => setTimeout(resolve, 350))
   }
 
   for (let artist of artists) {

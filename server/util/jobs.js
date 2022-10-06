@@ -10,7 +10,7 @@ const Release = require('../models/Release.cjs')
 import { day60DaysAgo } from '../util/day60DaysAgo.js'
 
 const initJobs = async () => {
-  const runEveryDay = cron.schedule('00 00 05 * * *', async () => {
+  const runEveryDay = cron.schedule('15 15 * * *', async () => {
     const users = await User.find()
 
     for (let user of users) {
@@ -107,6 +107,12 @@ const initJobs = async () => {
             url: err.config.url,
           })
         })
+
+      await logService.addLogToDatabase({
+        username: user.spotify_id,
+        action: 'test',
+        message: `lastFetchNewArtistsSync: ${user.lastFetchNewArtistsSync} lastFetchNewAlbumsAdded: ${user.lastFetchNewAlbumsAdded}`,
+      })
 
       //step 5 - update releases page
       if (!user.lastFetchNewArtistsSync && !user.lastFetchNewAlbumsAdded) {

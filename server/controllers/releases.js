@@ -70,7 +70,13 @@ router.get('/all', async (request, response) => {
   //update last fetch date in user's profile
   await userInfoService.updateFetchDate(userId)
 
-  response.json(albums.sort((a, b) => a.artistName.localeCompare(b.artistName)))
+  await logService.addLogToDatabase({
+    username: userId,
+    action: 'releases/all-songs',
+    message: 'Reached end of /all',
+  })
+
+  return response.json()
 })
 
 //get newly released songs
@@ -96,6 +102,12 @@ router.get('/update', async (request, response) => {
   const { accessToken, userId } = request.query
 
   axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
+
+  await logService.addLogToDatabase({
+    username: userId,
+    action: 'releases/update',
+    message: 'Started updating database',
+  })
 
   //add new releases to database
   const releases = await dataService.addReleasesToDatabase(userId)

@@ -1,4 +1,4 @@
-# fly.toml file generated for spotify-new-releases on 2022-09-07T23:21:10+02:00
+# fly.toml file generated for spotify-new-releases on 2022-10-06T14:24:57+02:00
 
 app = "spotify-new-releases"
 kill_signal = "SIGINT"
