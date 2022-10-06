@@ -10,7 +10,7 @@ const Release = require('../models/Release.cjs')
 import { day60DaysAgo } from '../util/day60DaysAgo.js'
 
 const initJobs = async () => {
-  const runEveryDay = cron.schedule('15 15 * * *', async () => {
+  const runEveryDay = cron.schedule('30 03 * * *', async () => {
     const users = await User.find()
 
     for (let user of users) {
