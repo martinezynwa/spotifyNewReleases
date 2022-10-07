@@ -20,9 +20,23 @@ How:
 
 ### PROGRESS
 
+### TBD
+- [ ] go back button
+- [ ] figure out unnecessary re-renders
+- [ ] when returning from release that is placed low, it should return to the same place, not to the top
+- [ ] some records are released during the day and not at midnight, add function to check the previous day as well
+
+### 0.17
+- [x] backend job part re-done as it wasn't working properly when deployed
+  - [x] unnecessary functions removed
+  - [x] release checking inside job simplified
+
+### 0.16
+- [x] create demo version
+  - [x] regular jobs for demo account
+- [x] deletion confirmation(double click)
 
 ### 0.15
-
 - [x] remove Artists page and merge it with groups page
    - [x] context update etc.
 - [x] load specific artists per group only, not all
@@ -46,17 +60,8 @@ How:
   - [x] Login page
   - [x] Notifications
 
-### 0.16
-- [x] create demo version
-  - [x] regular jobs for demo account
-- [x] deletion confirmation(double click)
 
-### TBD
-- [ ] go back button
-- [ ] figure out unnecessary re-renders
-- [ ] when returning from release that is placed low, it should return to the same place, not to the top
-- [ ] some records are released during the day and not at midnight, add function to check the previous day as well
-
+### previous versions divided by parts
 
 # AUTH & USER
 ### 0.10

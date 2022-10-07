@@ -23,7 +23,7 @@ export const ReleaseProvider = ({ children }) => {
   useEffect(() => {
     const getData = async () => {
       await releaseService
-        .getReleasesFromLast30Days(user.userId)
+        .getReleasesFromLast60Days(user.userId)
         .then(res => {
           setReleases(res)
         })
@@ -49,7 +49,7 @@ export const ReleaseProvider = ({ children }) => {
   //get more releases(infinite scrolling)
   const getMoreReleases = async skip => {
     await releaseService
-      .getReleasesFromLast30Days(user.userId, skip)
+      .getReleasesFromLast60Days(user.userId, skip)
       .then(res => {
         dispatch({
           type: 'ADD_RELEASES',

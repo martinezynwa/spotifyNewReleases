@@ -4,7 +4,7 @@ const require = createRequire(import.meta.url)
 import express from 'express'
 import axios from 'axios'
 import dayjs from 'dayjs'
-import logService from '../util/logger.js'
+import logService from '../util/logService.js'
 import { loginUrl } from '../util/loginUrl.js'
 
 const User = require('../models/User.cjs')

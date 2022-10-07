@@ -5,9 +5,8 @@ import axios from 'axios'
 import express from 'express'
 import dayjs from 'dayjs'
 import Release from '../models/Release.cjs'
-import dataService from '../util/songsAndAlbums.js'
-import logService from '../util/logger.js'
-import userInfoService from '../util/userInfoManipulation.js'
+import dataService from '../util/dataService.js'
+import logService from '../util/logService.js'
 
 const Artist = require('../models/Artist.cjs')
 const router = express.Router()
@@ -73,12 +72,6 @@ router.get('/sync', async (request, response) => {
       artistsArray.length !== 0 ? artistsArray.length : '0'
     } new artists`,
   })
-
-  await userInfoService.updateFetchValues(
-    'lastFetchNewArtistsSync',
-    artistsArray.length > 0 ? true : false,
-    userId,
-  )
 
   //returning only newly followed artists back to client
   response.json(
@@ -171,10 +164,10 @@ router.get('/remove', async (request, response) => {
   await logService.addLogToDatabase({
     username: userId,
     action: 'spotify/remove',
-    message: `Unfollowed 0 artists`,
+    message: `Unfollowed zero artists`,
   })
 
-  return response.json()
+  response.json()
 })
 
 export default router

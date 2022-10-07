@@ -10,7 +10,7 @@ import artistRouter from './controllers/artists.js'
 import releasesRouter from './controllers/releases.js'
 import spotifyRouter from './controllers/spotify.js'
 import logRouter from './controllers/logs.js'
-import initJobs from './util/jobs.js'
+import initJobs from './util/jobService.js'
 
 const app = express()
 

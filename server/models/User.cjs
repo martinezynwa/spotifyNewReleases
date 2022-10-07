@@ -16,12 +16,6 @@ const schema = new mongoose.Schema({
   lastFetchDate: {
     type: String,
   },
-  lastFetchNewArtistsSync: {
-    type: Boolean,
-  },
-  lastFetchNewAlbumsAdded: {
-    type: Boolean,
-  },
 })
 
 module.exports = mongoose.model('User', schema)

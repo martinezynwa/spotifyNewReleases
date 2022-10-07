@@ -2,8 +2,8 @@ import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
 
 import axios from 'axios'
-import { day60DaysAgo } from '../util/day60DaysAgo.js'
-import logService from '../util/logger.js'
+import { day60DaysAgo } from './day60DaysAgo.js'
+import logService from './logService.js'
 
 const Artist = require('../models/Artist.cjs')
 const Release = require('../models/Release.cjs')
@@ -72,7 +72,6 @@ const getAlbums = async (lastFetchDate, userId) => {
           items = res.data.items
         })
         .catch(async err => {
-          console.log('testXYZ', err.response)
           await logService.addLogToDatabase({
             username: userId,
             action: 'filterReleases',
@@ -115,10 +114,15 @@ const getAlbums = async (lastFetchDate, userId) => {
         }
 
         artistsArray.push({
-          artistName: singleArtist.name,
-          albumName: release.name,
-          connectedGroupId: artist.connectedGroupId,
+          createdBy: userId,
+          artistSpotifyId: artist.artistSpotifyId,
           albumId: release.id,
+          albumName: release.name,
+          artistName: singleArtist.name,
+          releaseDate: release.release_date,
+          albumType: release.type,
+          albumImage: release.images[1].url,
+          connectedGroupId: artist.connectedGroupId,
         })
       })
     }
@@ -126,7 +130,7 @@ const getAlbums = async (lastFetchDate, userId) => {
 
   //delay function so the Spotify Web API Rate limit is not triggered
   const delay = () => {
-    return new Promise((resolve, reject) => setTimeout(resolve, 350))
+    return new Promise((resolve, reject) => setTimeout(resolve, 1000))
   }
 
   for (let artist of artists) {
@@ -392,7 +396,7 @@ const addReleasesToDatabase = async userId => {
 
   //delay function so the Spotify Web API Rate limit is not triggered
   const delay = () => {
-    return new Promise((resolve, reject) => setTimeout(resolve, 250))
+    return new Promise((resolve, reject) => setTimeout(resolve, 1000))
   }
 
   for (let artist of artists) {
