@@ -396,7 +396,7 @@ const addReleasesToDatabase = async userId => {
 
   //delay function so the Spotify Web API Rate limit is not triggered
   const delay = () => {
-    return new Promise((resolve, reject) => setTimeout(resolve, 1000))
+    return new Promise((resolve, reject) => setTimeout(resolve, 400))
   }
 
   for (let artist of artists) {
