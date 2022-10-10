@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
+import noAlbumArt from '../../assets/img/missing_album.jpg'
 
 //Component showing songs inside album
 const SingleRelease = ({ artist }) => {
@@ -9,7 +10,7 @@ const SingleRelease = ({ artist }) => {
         <div className="flex flex-row md:flex-col bg-album p-4 cursor-pointer hover:bg-active border-b-[1px] border-stone-800 md:border-b-0 rounded-none md:rounded">
           <div className="mb-4 rounded">
             <img
-              src={artist.albumImage}
+              src={artist.albumImage !== '' ? artist.albumImage : noAlbumArt}
               alt=""
               className="max-w-none object-cover w-32 h-32 md:rounded md:w-full md:h-full hover:scale-110 transition duration-300 ease-in-out"
             />

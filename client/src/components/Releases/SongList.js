@@ -1,3 +1,5 @@
+import noAlbumArt from '../../assets/img/missing_album.jpg'
+
 const SongList = ({ songs, artist }) => {
   const convertMs = songDuration => {
     const minutes = new Date(songDuration).getMinutes()
@@ -30,7 +32,7 @@ const SongList = ({ songs, artist }) => {
     <>
       <div className="flex flex-col md:flex-row mb-4 md:py-16 md:pt-10 px-4 h-80 bg-gradient-to-b from-[#1E3264] to-black">
         <img
-          src={artist.albumImage}
+          src={artist.albumImage !== '' ? artist.albumImage : noAlbumArt}
           alt=""
           className="flex m-auto md:m-0 md:my-auto md:mb-10 md:mr-5 md:ml-4 w-48 h-48 md:w-56 md:h-56 object-cover shadow-2xl"
         />

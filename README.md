@@ -18,9 +18,16 @@ How:
 - logic inside will grab every artist within the group and check if there are any new releases for them lately
 - if so, new songs are added to the playlist
 
+### ISSUES
+- During day, when manually retrieving new releases, Spotify tend to return errors 5XX, either service unavailable or service didn't reply
+
 ### PROGRESS
 
 ### TBD
+- [ ] manual refresh - getting error 0, undefined after +/- 200 releases checked, check continues though
+- [ ] sometimes, when logged as test user, no releases are shown on the dashboard for the first time, only after refresh
+- [ ] when rendering name, undefines is shown for the first time for a couple of ms
+
 - [ ] go back button
 - [ ] figure out unnecessary re-renders
 - [ ] when returning from release that is placed low, it should return to the same place, not to the top

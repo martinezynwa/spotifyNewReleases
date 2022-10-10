@@ -99,7 +99,6 @@ const getAlbums = async (lastFetchDate, userId) => {
         filteredReleases.push(...items)
       }
     }
-
     if (filteredReleases.length !== 0) {
       //in case 2+ artists are listed as creators, only one is picked
       filteredReleases.map(release => {
@@ -121,7 +120,7 @@ const getAlbums = async (lastFetchDate, userId) => {
           artistName: singleArtist.name,
           releaseDate: release.release_date,
           albumType: release.type,
-          albumImage: release.images[1].url,
+          albumImage: release.images.length !== 0 ? release.images[1].url : '',
           connectedGroupId: artist.connectedGroupId,
         })
       })
@@ -130,7 +129,7 @@ const getAlbums = async (lastFetchDate, userId) => {
 
   //delay function so the Spotify Web API Rate limit is not triggered
   const delay = () => {
-    return new Promise((resolve, reject) => setTimeout(resolve, 1000))
+    return new Promise((resolve, reject) => setTimeout(resolve, 500))
   }
 
   for (let artist of artists) {
@@ -369,7 +368,8 @@ const addReleasesToDatabase = async userId => {
             artistName: singleArtist.name,
             releaseDate: release.release_date,
             albumType: release.album_type,
-            albumImage: release.images[1].url,
+            albumImage:
+              release.images.length !== 0 ? release.images[1].url : '',
           })
         }
       }),
