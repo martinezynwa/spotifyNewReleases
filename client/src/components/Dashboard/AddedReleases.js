@@ -14,7 +14,7 @@ const AddedReleases = () => {
   if (!releases) return
 
   releases = releases.filter(
-    i => i.releaseDate.replace(/-/g, '') >= today.replace(/-/g, ''),
+    i => i.releaseDate.replace(/-/g, '') === today.replace(/-/g, ''),
   )
 
   return (
