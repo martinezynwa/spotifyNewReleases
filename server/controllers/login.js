@@ -81,15 +81,15 @@ router.get('/callback', async (request, response) => {
       await logService.addLogToDatabase({
         username: null,
         action: 'get user data',
-        message: err.response.data.error.message,
-        status: err.response.data.error.status,
+        message: err.response.data,
+        status: err.response.status,
         baseUrl: err.config.baseURL,
         url: err.config.url,
       })
       return {
         error: true,
-        status: err.response.data.error.status,
-        message: err.response.data.error.message,
+        status: err.response.status,
+        message: `Error ${err.response.status}. ${err.response.data}, please return and use the demo version.`,
       }
     })
 
